@@ -1,0 +1,9 @@
+<script setup lang="ts">
+
+</script>
+
+<template>
+  <div class="vgr-card bg-white rounded-lg shadow-md border border-neutral-90">
+    <slot/>
+  </div>
+</template>
