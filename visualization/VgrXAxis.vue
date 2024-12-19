@@ -5,6 +5,8 @@ export default {
   props: {
     type: String as PropType<'default' | 'time'>,
     labels: Array as PropType<string[]>,
+    start: String,
+    end: String,
     class: String,
   },
   data: () => ({

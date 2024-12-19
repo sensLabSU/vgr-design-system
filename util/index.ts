@@ -146,7 +146,12 @@ function formatString(format, ...args) {
     });
 }
 
-function resolveColor(name, defaultColor = 'healthcare') {
+const colorNamesWithLevels = ['healthcare', 'culture', 'education', 'base', 'neutral', 'error', 'purple', 'brown', 'cyan', 'green', 'lime', 'orange', 'pink', 'yellow'];
+const allColorNames = ['healthcare', 'culture', 'education', 'base', 'neutral', 'error', 'purple', 'brown', 'cyan', 'green', 'lime', 'orange', 'pink', 'yellow', 'white', 'black'];
+
+const colorNameRegex = new RegExp('^(' + colorNamesWithLevels.join('|') + ')\:(\\d{1,2})$');
+
+function resolveColor(name: string, defaultColor = 'healthcare'): string|object {
     switch(name) {
         case 'healthcare':
         case 'culture':
@@ -166,13 +171,25 @@ function resolveColor(name, defaultColor = 'healthcare') {
         case 'black':
             return name;
         case 'secondary':
+        case 'red':
             return 'culture';
         case 'tertiary':
             return 'education';
         case 'primary':
-        default:
-            return defaultColor;
+            return 'healthcare';
     }
+
+    const matches = colorNameRegex.exec(name);
+    if(matches) {
+        return {
+            fill: `fill-${matches[1]}-${matches[2]}`,
+            stroke: `stroke-${matches[1]}-${matches[2]}`,
+            bg: `bg-${matches[1]}-${matches[2]}`,
+            text: `text-${matches[1]}-${matches[2]}`,
+        };
+    }
+
+    return defaultColor;
 }
 
 export {

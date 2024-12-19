@@ -1,4 +1,4 @@
-const tailwindDefaultColors = {
+const colors = {
     transparent: 'transparent',
     white: '#ffffff',
     black: '#000000',
@@ -201,6 +201,51 @@ const tailwindDefaultColors = {
     },
 };
 
+const safelist = [
+    {
+        pattern: /!?(bg|text|fill|stroke|border)-(healthcare|culture|education|base|neutral|error|purple|brown|cyan|green|lime|orange|pink|yellow|black|white)-/,
+    },
+];
+
+const defaultTailwindConfig = {
+    safelist,
+    theme: {
+        colors: colors,
+        extend: {
+            fontSize: {
+                '2xs': '10px',
+            }
+        },
+    },
+    plugins: [],
+}
+
+function isObject(item: any) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+function mergeDeep(target: object, ...sources: object[]) {
+    if (!sources.length) return target;
+    const source = sources.shift();
+
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (isObject(source[key])) {
+                if (!target[key]) Object.assign(target, { [key]: {} });
+                mergeDeep(target[key], source[key]);
+            } else {
+                Object.assign(target, { [key]: source[key] });
+            }
+        }
+    }
+
+    return mergeDeep(target, ...sources);
+}
+
+const config = function(conf: object) {
+    return mergeDeep(defaultTailwindConfig, conf);
+}
+
 export {
-    tailwindDefaultColors
+    config
 };

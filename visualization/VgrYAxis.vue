@@ -10,6 +10,7 @@ export default {
     identifier: String,
     class: String,
     steps: Array as PropType<string[]>,
+    label: String,
   },
   data: () => ({
       id: 'vgr-y-axis-' + Math.random() * 1000000,
