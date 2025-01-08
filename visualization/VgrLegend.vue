@@ -5,6 +5,7 @@ export default {
   props: {
     align: String as PropType<null | 'default' | 'left' | 'start' | 'center' | 'middle' | 'right' | 'end'>,
     class: String,
+    bottom: Boolean,
   },
   inject: ['chart'],
   created() {

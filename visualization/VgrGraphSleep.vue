@@ -31,9 +31,9 @@ export default {
         h('defs', [
           h('linearGradient', {id:`${this.id}-fill`, x1:"0%", y1:"0%", x2:"0%", y2:"100%"}, [
             h('stop', { offset: '2.5%', 'stop-color': 'currentColor', class: 'text-pink-60' }),
-            h('stop', { offset: '27.5%', 'stop-color': 'currentColor', class: 'text-cyan-80' }),
-            h('stop', { offset: '52.5%', 'stop-color': 'currentColor', class: 'text-cyan-60' }),
-            h('stop', { offset: '77.5%', 'stop-color': 'currentColor', class: 'text-cyan-30' }),
+            h('stop', { offset: '27.5%', 'stop-color': 'currentColor', class: 'text-blue-90' }),
+            h('stop', { offset: '52.5%', 'stop-color': 'currentColor', class: 'text-blue-70' }),
+            h('stop', { offset: '77.5%', 'stop-color': 'currentColor', class: 'text-blue-50' }),
             h('stop', { offset: '100%', 'stop-color': 'currentColor', class: 'text-base' }),
           ]),
         ]),

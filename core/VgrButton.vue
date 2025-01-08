@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, ComputedRef} from "vue";
-import {Align, Color} from "../types";
+import {Align} from "../types";
 import {resolveColor} from "../util";
 
 type ButtonVariant = 'default' | 'filled' | 'outline' | 'ghost' | 'clear';
@@ -12,17 +12,19 @@ const props = withDefaults(defineProps<{
   href?: string;
   size?: null | 'default' | 'small' | 'large';
   variant?: null | ButtonVariant;
-  color?: null | Color;
+  color?: null | string;
   disabled?: boolean;
   square?: boolean;
   expand?: null | ButtonExpand;
   align?: null | Align;
+  tabindex?: number;
 }>(), {
   is: 'button',
   type: 'button',
   size: null,
   variant: null,
   disabled: false,
+  tabindex: 0,
 });
 
 const colors = {
@@ -101,6 +103,11 @@ const colors = {
     ghost: 'text-white border-transparent hover:bg-white/10 focus-visible:bg-white/10 active:bg-white/30',
     outline: 'text-white border-white hover:bg-white/10 focus-visible:bg-white/10 active:bg-white/30',
   },
+  blue: {
+    filled: 'bg-blue-50 text-white border-blue-50 hover:bg-blue-60 hover:border-blue-60 active:bg-blue-40 active:border-blue-40',
+    ghost: 'text-blue-50 border-transparent hover:bg-blue-50/10 focus-visible:bg-blue-50/10 active:bg-blue-50/30',
+    outline: 'text-blue-50 border-blue-50 hover:bg-blue-50/10 focus-visible:bg-blue-50/10 active:bg-blue-50/30',
+  },
   black: {
     filled: 'bg-black text-white border-transparent hover:bg-black/50 active:bg-black/80',
     ghost: 'text-black border-transparent hover:bg-black/10 focus-visible:bg-black/10 active:bg-black/30',
@@ -125,17 +132,20 @@ const classes: ComputedRef<string> = computed((): string => {
     }
   }
 
+  const colorName = resolveColor(props.color);
+  const color = (typeof(colorName) === 'string') ? colors[colorName] : colors.healthcare;
+
   switch(props.variant) {
     case 'filled':
-      cls.push(colors[resolveColor(props.color)]?.filled);
+      cls.push(color.filled);
       break;
     case 'ghost':
     case 'clear':
-      cls.push(colors[resolveColor(props.color)]?.ghost);
+      cls.push(color.ghost);
       break;
     case 'outline':
     default:
-      cls.push(colors[resolveColor(props.color)]?.outline);
+      cls.push(color.outline);
       break;
   }
 
@@ -183,6 +193,7 @@ const classes: ComputedRef<string> = computed((): string => {
              :class="[classes]"
              :disabled="disabled"
              :aria-disabled="disabled ? 'true' : null"
+             :tabindex="disabled ? -1 : tabindex"
   >
     <slot/>
   </component>

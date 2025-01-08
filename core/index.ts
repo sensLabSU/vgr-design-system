@@ -8,3 +8,4 @@ export {default as VgrDropdown} from "./VgrDropdown.vue";
 export {default as VgrMenu} from "./VgrMenu.vue";
 export {default as VgrItem} from "./VgrItem.vue";
 export {default as VgrSeparator} from "./VgrSeparator.vue";
+export {default as VgrTooltip} from "./VgrTooltip.vue";

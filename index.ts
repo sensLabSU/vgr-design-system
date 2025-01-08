@@ -199,11 +199,25 @@ const colors = {
         '95': '#FFECB3',
         '99': '#FFF9E7',
     },
+    blue: {
+        DEFAULT: '#118ce6',
+        '10': '#092848',
+        '20': '#0d3f6d',
+        '30': '#094a83',
+        '40': '#05579f',
+        '50': '#056dc4',
+        '60': '#118ce6',
+        '70': '#3ba7f5',
+        '80': '#5db5f9',
+        '90': '#bbdffc',
+        '95': '#e0effe',
+        '99': '#f0f7ff',
+    },
 };
 
 const safelist = [
     {
-        pattern: /!?(bg|text|fill|stroke|border)-(healthcare|culture|education|base|neutral|error|purple|brown|cyan|green|lime|orange|pink|yellow|black|white)-/,
+        pattern: /!?(bg|text|fill|stroke|border)-(healthcare|culture|education|base|neutral|error|purple|brown|cyan|green|lime|orange|pink|yellow|blue|black|white)-/,
     },
 ];
 

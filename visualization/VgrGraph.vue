@@ -1,17 +1,21 @@
 <script lang="ts">
 import {h, PropType} from "vue";
-import {Color} from "../types";
 
 export default {
   props: {
     name: String,
-    type: String as PropType<'line'|'bar'>,
-    data: Array as PropType<number[]>,
+    type: String as PropType<'line'|'bar'|'donut'|'pie'>,
+    data: [Array as PropType<number[]>, Number],
     format: String,
     axis: String,
     color: String,
     smooth: Boolean,
     detail: String as PropType<'none'|'circle'|'square'|'triangle'>,
+    donutThickness: {
+      type: Number,
+      default: 0.15,
+    },
+    extrude: Boolean,
   },
   data() {
     return {
@@ -33,9 +37,11 @@ export default {
       switch(this.type) {
         case 'line': return this.renderLineGraph();
         case 'bar': return this.renderBarGraph();
+        case 'donut': return this.renderDonutSegment();
+        case 'pie': return this.renderPieSegment();
       }
       return null;
-    }
+    },
   },
   methods: {
     linePath(): string {
@@ -108,6 +114,57 @@ export default {
 
       return paths.join(' ');
     },
+    donutPath(): string {
+      const offset = this.chart.getCircularOffset(this);
+      const total = this.chart.getCircularTotal();
+      const p = this.values / total;
+      let [x, y] = this.chart.getCenter();
+      const or = this.chart.getCircularRadius();
+      const ir = or - (or * this.donutThickness);
+
+      const sa = (Math.PI / 2) + (Math.PI * 2) * offset;
+      const ha = sa + (Math.PI * 2) * p * 0.5;
+      const ea = sa + (Math.PI * 2) * p;
+
+
+      if(this.extrude) {
+        x -= Math.cos(ha) * or * 0.2;
+        y -= Math.sin(ha) * or * 0.2;
+      }
+
+      const commands = [];
+      commands.push(`M ${x - Math.cos(sa) * or} ${y - Math.sin(sa) * or}`);
+      commands.push(`A ${or} ${or} 0 0 1 ${x - Math.cos(ha) * or} ${y - Math.sin(ha) * or}`);
+      commands.push(`A ${or} ${or} 0 0 1 ${x - Math.cos(ea) * or} ${y - Math.sin(ea) * or}`);
+      commands.push(`L ${x - Math.cos(ea) * ir} ${y - Math.sin(ea) * ir}`);
+      commands.push(`A ${ir} ${ir} 0 0 0 ${x - Math.cos(ha) * ir} ${y - Math.sin(ha) * ir}`);
+      commands.push(`A ${ir} ${ir} 0 0 0 ${x - Math.cos(sa) * ir} ${y - Math.sin(sa) * ir}`);
+      commands.push(`Z`);
+
+      return commands.join(' ');
+    },
+    piePath(): string {
+      const offset = this.chart.getCircularOffset(this);
+      const total = this.chart.getCircularTotal();
+      const p = this.values / total;
+      const [x, y] = this.chart.getCenter();
+      const width = this.chart.getWidth();
+      const height = this.chart.getHeight();
+      const or = Math.min(width, height) / 2;
+
+      const sa = (Math.PI / 2) + (Math.PI * 2) * offset;
+      const ha = sa + (Math.PI * 2) * p * 0.5;
+      const ea = sa + (Math.PI * 2) * p;
+
+      const commands = [];
+      commands.push(`M ${x - Math.cos(sa) * or} ${y - Math.sin(sa) * or}`);
+      commands.push(`A ${or} ${or} 0 0 1 ${x - Math.cos(ha) * or} ${y - Math.sin(ha) * or}`);
+      commands.push(`A ${or} ${or} 0 0 1 ${x - Math.cos(ea) * or} ${y - Math.sin(ea) * or}`);
+      commands.push(`L ${x} ${y}`);
+      commands.push(`Z`);
+
+      return commands.join(' ');
+    },
     renderLineGraph() {
       const color = this.chart.getColor(this.color);
 
@@ -148,6 +205,16 @@ export default {
       const color = this.chart.getColor(this.color);
 
       return h('path', {d: this.barPath(), class: 'stroke-none ' + color.fill});
+    },
+    renderDonutSegment() {
+      const color = this.chart.getColor(this.color);
+
+      return h('path', {d: this.donutPath(), class: 'stroke-none ' + color.fill});
+    },
+    renderPieSegment() {
+      const color = this.chart.getColor(this.color);
+
+      return h('path', {d: this.piePath(), class: 'stroke-none ' + color.fill});
     },
   },
   render() { },

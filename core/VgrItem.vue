@@ -17,7 +17,7 @@ function onClick() {
 
 <template>
   <component :is="href ? 'a' : 'button'" :type="href ? null : 'button'" :href="href || null"
-          class="vgr-item py-1.5 px-2 flex items-center whitespace-nowrap w-full rounded-md hover:bg-neutral-95"
+          class="vgr-item py-1.5 px-2 flex items-center whitespace-nowrap w-full rounded-md hover:bg-neutral-95 select-none"
           :data-has-icon="!!icon || null"
           @click="onClick"
   >

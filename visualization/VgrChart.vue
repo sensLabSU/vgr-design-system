@@ -22,6 +22,7 @@ const colors = {
   'orange': {stroke: 'stroke-orange', fill: 'fill-orange', bg: 'bg-orange'},
   'pink': {stroke: 'stroke-pink', fill: 'fill-pink', bg: 'bg-pink'},
   'yellow': {stroke: 'stroke-yellow-70', fill: 'fill-yellow-70', bg: 'bg-yellow-70'},
+  'blue': {stroke: 'stroke-blue-70', fill: 'fill-blue-70', bg: 'bg-blue-70'},
 };
 
 const graphWrapper: Ref<HTMLElement> = ref();
@@ -226,6 +227,12 @@ provide('chart', {
   getHeight(): number {
     return size.height;
   },
+  getCenter(): [number, number] {
+    return [
+        size.width / 2,
+        size.height / 2,
+    ];
+  },
   getX(index: number, dataPoint: any): number {
     if(xAxis.value?.type === 'time') {
       if(typeof dataPoint !== 'object') throw new Error('Data points needs to be objects when using type="time" for VgrXAxis!');
@@ -261,6 +268,33 @@ provide('chart', {
   getXAxisTimeSeconds() {
     return xAxisTimeSeconds.value;
   },
+  getCircularTotal(): number {
+    return graphs.value.filter(g => ['donut','pie'].includes(g.type)).reduce((a, c) => a + c.values, 0) || 1;
+  },
+  getCircularIndex(graph: Graph): number {
+    return graphs.value.filter(g => ['donut','pie'].includes(g.type)).indexOf(graph);
+  },
+  getCircularOffset(graph: Graph): number {
+    const donutGraphs = graphs.value.filter(g => ['donut','pie'].includes(g.type));
+    const index = donutGraphs.indexOf(graph);
+    const total = donutGraphs.reduce((a, c) => a + c.values, 0);
+
+    let acc = 0;
+    for(let i = 0; i < index; i++) {
+      acc += donutGraphs[i].values;
+    }
+
+    return acc / total;
+  },
+  getCircularRadius(): number {
+    const rad = Math.min(size.width, size.height) / 2;
+
+    if(graphs.value.filter(g => ['donut','pie']).some(g => g.extrude === true)) {
+      return rad * 0.8;
+    }
+
+    return rad;
+  }
 });
 
 let resizeTimer = null;
@@ -284,8 +318,8 @@ onBeforeUnmount(() => {
 
 <template>
   <vgr-stack class="aspect-[2/1] w-full" gap="small">
-    <vgr-stack v-if="legend" horizontal class="w-full pb-2 flex-wrap gap-y-1" :class="legend.class || null" :align="legend.align || null">
-      <template v-for="(graph, index) in graphs" :key="index">
+    <vgr-stack v-if="legend && !legend.bottom" horizontal class="w-full pb-2 flex-wrap gap-y-1" :class="legend.class || null" :align="legend.align || null">
+      <template v-for="(graph, graphIndex) in graphs" :key="graphIndex">
         <div v-if="graph.name" class="flex items-center gap-2 text-sm">
           <template v-if="graph.type === 'line'">
             <span v-if="graph.detail === 'square'" class="block size-[7.5px]" :class="[getColor(graph.color).bg]"></span>
@@ -326,13 +360,16 @@ onBeforeUnmount(() => {
         </template>
       </div>
       <div class="flex-1 flex flex-col">
-        <div class="flex-1 border-b border-neutral-80 relative">
+        <div class="flex-1 relative" :class="{'border-b border-neutral-80': !!xAxis}">
           <div ref="graphWrapper" class="absolute inset-0">
             <svg v-if="size.width > 0" class="w-full h-auto -my-1" :viewBox="`0 -4 ${size.width} ${size.height + 8}`" preserveAspectRatio="none">
               <template v-for="(graph, seriesIndex) in graphs" :key="seriesIndex">
                 <component :is="graph.paths" />
               </template>
             </svg>
+            <div v-if="$slots['donut-center']" class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+              <slot name="donut-center"/>
+            </div>
           </div>
         </div>
         <!-- X Axis -->
@@ -376,6 +413,21 @@ onBeforeUnmount(() => {
         </template>
       </div>
     </div>
+    <vgr-stack v-if="legend && legend.bottom" horizontal class="w-full pb-2 flex-wrap gap-y-1" :class="legend.class || null" :align="legend.align || null">
+      <template v-for="(graph, index) in graphs" :key="index">
+        <div v-if="graph.name" class="flex items-center gap-2 text-sm">
+          <template v-if="graph.type === 'line'">
+            <span v-if="graph.detail === 'square'" class="block size-[7.5px]" :class="[getColor(graph.color).bg]"></span>
+            <svg v-else-if="graph.detail === 'triangle'" viewBox="0 0 10 9" width="10" height="9">
+              <path d="M5,0 L10,9 0,9 Z" class="stroke-none" :class="[getColor(graph.color).fill]"/>
+            </svg>
+            <span v-else class="block size-2 rounded-full" :class="[getColor(graph.color).bg]"/>
+          </template>
+          <span v-else class="block size-2 rounded-[2px]" :class="[getColor(graph.color).bg]"/>
+          <span>{{ graph.name }}</span>
+        </div>
+      </template>
+    </vgr-stack>
     <slot/>
   </vgr-stack>
 </template>

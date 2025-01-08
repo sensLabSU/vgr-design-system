@@ -27,12 +27,12 @@ function toggle(): void {
   popover.value.style.left = left + 'px';
 }
 
-function onBeforeToggle(event): void {
-  popover.value.classList.toggle('opacity-0', event.newState === 'closed');
+function onBeforeToggle(event: Event): void {
+  popover.value.classList.toggle('opacity-0', (event as ToggleEvent).newState === 'closed');
 }
 
-function onToggle(event: ToggleEvent): void {
-  isOpen.value = event.newState === 'open';
+function onToggle(event: Event): void {
+  isOpen.value = (event as ToggleEvent).newState === 'open';
 }
 
 onMounted((): void => {

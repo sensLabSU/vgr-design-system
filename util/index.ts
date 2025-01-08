@@ -1,3 +1,5 @@
+import useKeyboardShortcuts from "./useKeyboardShortcuts";
+
 function formatString(format, ...args) {
     const matchCode = function (code, val) {
         switch (code) {
@@ -146,37 +148,23 @@ function formatString(format, ...args) {
     });
 }
 
-const colorNamesWithLevels = ['healthcare', 'culture', 'education', 'base', 'neutral', 'error', 'purple', 'brown', 'cyan', 'green', 'lime', 'orange', 'pink', 'yellow'];
-const allColorNames = ['healthcare', 'culture', 'education', 'base', 'neutral', 'error', 'purple', 'brown', 'cyan', 'green', 'lime', 'orange', 'pink', 'yellow', 'white', 'black'];
+const colorNamesWithLevels = ['healthcare', 'culture', 'education', 'base', 'neutral', 'error', 'purple', 'brown', 'cyan', 'green', 'lime', 'orange', 'pink', 'yellow', 'blue'];
+const allColorNames = [...colorNamesWithLevels, 'white', 'black'];
 
 const colorNameRegex = new RegExp('^(' + colorNamesWithLevels.join('|') + ')\:(\\d{1,2})$');
 
 function resolveColor(name: string, defaultColor = 'healthcare'): string|object {
+    if(allColorNames.includes(name)) return name;
+
     switch(name) {
-        case 'healthcare':
-        case 'culture':
-        case 'education':
-        case 'base':
-        case 'neutral':
-        case 'error':
-        case 'purple':
-        case 'brown':
-        case 'cyan':
-        case 'green':
-        case 'lime':
-        case 'orange':
-        case 'pink':
-        case 'yellow':
-        case 'white':
-        case 'black':
-            return name;
-        case 'secondary':
         case 'red':
+            return 'error';
+        case 'primary':
+            return 'healthcare';
+        case 'secondary':
             return 'culture';
         case 'tertiary':
             return 'education';
-        case 'primary':
-            return 'healthcare';
     }
 
     const matches = colorNameRegex.exec(name);
@@ -191,6 +179,8 @@ function resolveColor(name: string, defaultColor = 'healthcare'): string|object 
 
     return defaultColor;
 }
+
+export {default as useKeyboardShortcuts} from './useKeyboardShortcuts';
 
 export {
     formatString,
