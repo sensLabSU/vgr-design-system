@@ -29,6 +29,6 @@ function onClick() {
     <vgr-icon v-if="icon" :icon="icon" class="size-4 mr-3 [[data-command-palette]_&]:opacity-50"/>
     <span v-else class="hidden [[data-command-palette]_&]:block [[data-item-list]:has(>[data-has-icon])_&]:block w-7"></span>
     <slot/>
-    <span v-if="kbd" class="text-neutral-70 text-xs ml-auto rounded [[data-command-palette]_&]:p-1 [[data-command-palette]_&]:bg-neutral-95">{{ kbd }}</span>
+    <span v-if="kbd" class="text-neutral-70 font-mono text-xs ml-auto rounded [[data-command-palette]_&]:p-1 [[data-command-palette]_&]:bg-neutral-95">{{ kbd }}</span>
   </component>
 </template>
