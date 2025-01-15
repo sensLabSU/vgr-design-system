@@ -5,6 +5,17 @@ class KeyboardShortcutManager {
 
     constructor() {
         window.addEventListener('keydown', (e) => {
+            const focused = window.document.querySelector(':focus');
+            if(focused) {
+                if(focused.tagName === 'TEXTAREA') {
+                    return;
+                }
+                if(focused.tagName === 'INPUT') {
+                    if(['text','search','password','email','tel','date','datetime-local','month','number','time','url','week'].includes(focused.getAttribute('type')))
+                        return;
+                }
+            }
+
             const key = e.key.toUpperCase();
 
             if(this.boundKeys[key]?.length) {
@@ -13,6 +24,8 @@ class KeyboardShortcutManager {
                     if(shortcut._withShift !== undefined && shortcut._withShift !== e.shiftKey) return;
 
                     shortcut.callback();
+
+                    e.preventDefault();
                 });
             }
         });
