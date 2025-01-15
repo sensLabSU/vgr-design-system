@@ -38,6 +38,13 @@ function onFocus() {
   selectedIndex.value = 0;
   updateHighlight();
 }
+
+function onBlur() {
+  hasFocus.value = false;
+  selectedIndex.value = -1;
+  updateHighlight();
+}
+
 function onKeyDown(e) {
   if(selectedIndex.value < 0) {
     return;
@@ -67,12 +74,14 @@ function onKeyDown(e) {
 
 function updateHighlight() {
   children.value.forEach(c => {
-    c.classList.remove('!bg-neutral-95');
+    c.classList.remove('highlight');
   });
+
+  if(selectedIndex.value < 0) return;
 
   const filtered = children.value.filter(c => !c.classList.contains('hidden'));
   if(filtered.length > 0) {
-    filtered[selectedIndex.value].classList.add('!bg-neutral-95');
+    filtered[selectedIndex.value].classList.add('highlight');
   }
 }
 
@@ -131,7 +140,7 @@ defineExpose({
         <div class="flex items-center gap-2 px-4 py-2">
           <vgr-icon :icon="searchOutline" class="size-5 text-neutral-50"/>
           <input ref="inputEl" v-model="search" type="search"
-                 @keydown="onKeyDown" @focus="onFocus" @blur="hasFocus = false"
+                 @keydown="onKeyDown" @focus="onFocus" @blur="onBlur"
                  class="p-2 flex-1 border-none outline-0" placeholder="Sök..."/>
           <vgr-button variant="outline" color="neutral" size="small" class="!border border-neutral-70" @click="dismiss">Esc</vgr-button>
         </div>
