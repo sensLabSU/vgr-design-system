@@ -222,6 +222,11 @@ const safelist = [
 ];
 
 const defaultTailwindConfig = {
+    content: [
+        "./index.html",
+        "./src/**/*.{html,js,ts,vue}",
+        "./node_modules/vgr-design-system/**/*.vue",
+    ],
     safelist,
     theme: {
         colors: colors,
@@ -256,7 +261,7 @@ function mergeDeep(target: object, ...sources: object[]) {
     return mergeDeep(target, ...sources);
 }
 
-const config = function(conf: object) {
+const config = function(conf: object = {}) {
     return mergeDeep(defaultTailwindConfig, conf);
 }
 
