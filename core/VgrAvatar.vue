@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import {Color} from "../types";
 import {resolveColor} from "../util";
 
 const props = defineProps<{
   size?: null | 'default' | 'small' | 'large';
-  color?: null | Color;
+  color?: string | null;
 }>();
 
 const colors = {
