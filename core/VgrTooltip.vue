@@ -1,5 +1,5 @@
 <script lang="ts">
-import {cloneVNode, h, PropType, Ref, ref, useSlots} from "vue";
+import {cloneVNode, h, PropType, Ref, ref, Teleport, useSlots} from "vue";
 
 export default {
   props: {
@@ -14,13 +14,12 @@ export default {
 
     function showTooltip(e) {
       const op = e.target.offsetParent;
-      fixed.value = ['sticky','fixed'].includes(getComputedStyle(op).position);
+      fixed.value = op.tagName !== 'BODY' && ['sticky','fixed'].includes(getComputedStyle(op).position);
       const classes = [
-          (fixed ? 'fixed' : 'absolute'), 'm-0 pointer-events-none text-sm leading-tight',
+          (fixed.value ? 'fixed' : 'absolute'),
+          'z-[1000] m-0 pointer-events-none text-sm leading-tight',
           'bg-base-20 text-white px-3 py-2 rounded-md',
       ];
-
-      tooltip.value.showPopover();
 
       let left = e.target.offsetLeft;
       let top = e.target.offsetTop;
@@ -28,7 +27,7 @@ export default {
       switch (props.position) {
         case 'left':
           top += e.target.offsetHeight / 2;
-          classes.push('-translate-x-full -translate-y-1/2 mr-1');
+          classes.push('-translate-x-full -translate-y-1/2 -ml-1');
           break;
         case 'right':
           top += e.target.offsetHeight / 2;
@@ -42,7 +41,7 @@ export default {
           break;
         default:
           left += e.target.offsetWidth / 2;
-          classes.push('-translate-x-1/2 -translate-y-full mb-1');
+          classes.push('-translate-x-1/2 -translate-y-full -mt-1');
           break;
       }
 
@@ -51,7 +50,7 @@ export default {
       tooltip.value.style.left = left + 'px';
     }
     function hideTooltip() {
-      tooltip.value.hidePopover();
+      tooltip.value.className = 'hidden';
     }
 
     const slotContent = slots.default ? slots.default() : []
@@ -63,16 +62,20 @@ export default {
 
     return () => [
         ...transformedSlotContent,
-        h('div', {
-          ref: tooltip,
-          popover: 'auto',
+        h(Teleport, {
+          to: 'body',
         }, [
-          h('span', {
-            class: 'whitespace-pre',
-          }, props.text),
-          props.kbd ? h('span', {
-            class: 'font-mono opacity-60 ml-3',
-          }, props.kbd) : null,
+          h('div', {
+            ref: tooltip,
+            class: 'hidden',
+          }, [
+            h('span', {
+              class: 'whitespace-pre',
+            }, props.text),
+            props.kbd ? h('span', {
+              class: 'font-mono opacity-60 ml-3',
+            }, props.kbd) : null,
+          ]),
         ]),
     ];
   }
