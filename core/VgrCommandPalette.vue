@@ -145,7 +145,7 @@ defineExpose({
           <vgr-button variant="outline" color="neutral" size="small" class="!border border-neutral-70" @click="dismiss">Esc</vgr-button>
         </div>
 
-        <div ref="itemListEl" class="border-t border-neutral-90 p-2" @mousemove="onMouseMove">
+        <div ref="itemListEl" class="border-t border-black/20 p-2" @mousemove="onMouseMove">
           <slot/>
         </div>
 
