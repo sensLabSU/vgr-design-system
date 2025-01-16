@@ -52,7 +52,7 @@ function onKeyDown(e) {
 
   if(e.key === 'ArrowDown') {
     e.preventDefault();
-    const filtered = children.value.filter(c => !c.classList.contains('hidden'));
+    const filtered = children.value.filter(c => ['A','BUTTON'].includes(c.tagName) && !c.classList.contains('hidden'));
     selectedIndex.value = Math.min(selectedIndex.value + 1, filtered.length - 1);
     updateHighlight();
     return;
@@ -63,7 +63,7 @@ function onKeyDown(e) {
     return;
   } else if (e.key === 'Enter') {
     e.preventDefault();
-    const filtered = children.value.filter(c => !c.classList.contains('hidden'));
+    const filtered = children.value.filter(c => ['A','BUTTON'].includes(c.tagName) && !c.classList.contains('hidden'));
     if(filtered.length <= 0) return;
 
     const child = filtered[selectedIndex.value];
@@ -79,7 +79,7 @@ function updateHighlight() {
 
   if(selectedIndex.value < 0) return;
 
-  const filtered = children.value.filter(c => !c.classList.contains('hidden'));
+  const filtered = children.value.filter(c => ['A','BUTTON'].includes(c.tagName) && !c.classList.contains('hidden'));
   if(filtered.length > 0) {
     filtered[selectedIndex.value].classList.add('highlight');
   }
@@ -145,7 +145,7 @@ defineExpose({
           <vgr-button variant="outline" color="neutral" size="small" class="!border border-neutral-70" @click="dismiss">Esc</vgr-button>
         </div>
 
-        <div ref="itemListEl" class="border-t border-neutral-90 p-1" @mousemove="onMouseMove">
+        <div ref="itemListEl" class="border-t border-neutral-90 p-2" @mousemove="onMouseMove">
           <slot/>
         </div>
 
