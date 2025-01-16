@@ -11,6 +11,12 @@ const popover: Ref<HTMLElement> = ref();
 const fixed: Ref<boolean> = ref(false);
 const isOpen: Ref<boolean> = ref(false);
 
+function onClick() {
+  if(isOpen.value) return;
+
+  toggle();
+}
+
 function toggle(): void {
   const op = trigger.value.offsetParent;
 
@@ -47,7 +53,7 @@ onBeforeUnmount((): void => {
 </script>
 
 <template>
-  <div ref="trigger" @click="toggle">
+  <div ref="trigger" @click="onClick">
     <slot name="trigger" :is-open="isOpen"/>
   </div>
 

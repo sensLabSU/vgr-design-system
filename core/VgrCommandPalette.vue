@@ -45,6 +45,10 @@ function onBlur() {
   updateHighlight();
 }
 
+function filteredChildren() {
+  return children.value.filter(c => ['A','BUTTON'].includes(c.tagName) && !c.classList.contains('hidden'));
+}
+
 function onKeyDown(e) {
   if(selectedIndex.value < 0) {
     return;
@@ -52,8 +56,7 @@ function onKeyDown(e) {
 
   if(e.key === 'ArrowDown') {
     e.preventDefault();
-    const filtered = children.value.filter(c => ['A','BUTTON'].includes(c.tagName) && !c.classList.contains('hidden'));
-    selectedIndex.value = Math.min(selectedIndex.value + 1, filtered.length - 1);
+    selectedIndex.value = Math.min(selectedIndex.value + 1, filteredChildren().length - 1);
     updateHighlight();
     return;
   } else if (e.key === 'ArrowUp') {
@@ -63,7 +66,7 @@ function onKeyDown(e) {
     return;
   } else if (e.key === 'Enter') {
     e.preventDefault();
-    const filtered = children.value.filter(c => ['A','BUTTON'].includes(c.tagName) && !c.classList.contains('hidden'));
+    const filtered = filteredChildren();
     if(filtered.length <= 0) return;
 
     const child = filtered[selectedIndex.value];
@@ -79,7 +82,7 @@ function updateHighlight() {
 
   if(selectedIndex.value < 0) return;
 
-  const filtered = children.value.filter(c => ['A','BUTTON'].includes(c.tagName) && !c.classList.contains('hidden'));
+  const filtered = filteredChildren();
   if(filtered.length > 0) {
     filtered[selectedIndex.value].classList.add('highlight');
   }
@@ -104,7 +107,7 @@ watch(search, val => {
         c.classList.add('hidden');
       }
     });
-    numResults.value = children.value.filter(c => !c.classList.contains('hidden')).length;
+    numResults.value = filteredChildren().length;
   }
 
   updateHighlight();
@@ -114,7 +117,7 @@ function onMouseMove(e) {
   const el = e.target.closest('a,button');
   if(!el) return;
 
-  const filtered = children.value.filter(c => !c.classList.contains('hidden'));
+  const filtered = filteredChildren();
   if(filtered.indexOf(el) >= 0) {
     selectedIndex.value = filtered.indexOf(el);
     updateHighlight();

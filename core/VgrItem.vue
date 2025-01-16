@@ -41,8 +41,8 @@ function onClick() {
              @click="onClick"
   >
     <vgr-icon v-if="icon" :icon="icon" :class="[props['class:icon']]" class="size-4 mr-3 opacity-50 group-hover:opacity-100 [.highlight>&]:opacity-100"/>
-    <span v-else class="hidden [[data-command-palette]_&]:block [[data-item-list]:has(>[data-has-icon])_&]:block w-7"></span>
+    <span v-else class="hidden [[data-command-palette]_&]:block [[data-item-list]:has([data-has-icon])_&]:block w-7"></span>
     <slot/>
-    <span v-if="kbd" :class="[props['class:kbd']]" class="text-neutral-70 font-mono text-xs ml-auto rounded [[data-command-palette]_&]:p-1 [[data-command-palette]_&]:bg-black/5">{{ kbd }}</span>
+    <span v-if="kbd" :class="[props['class:kbd']]" class="text-neutral-70 font-mono text-xs ml-auto pl-4 rounded [[data-command-palette]_&]:p-1 [[data-command-palette]_&]:bg-black/5">{{ kbd }}</span>
   </component>
 </template>

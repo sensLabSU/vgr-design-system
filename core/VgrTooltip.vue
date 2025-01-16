@@ -49,6 +49,7 @@ export default {
       tooltip.value.style.top = top + 'px';
       tooltip.value.style.left = left + 'px';
     }
+
     function hideTooltip() {
       tooltip.value.className = 'hidden';
     }
