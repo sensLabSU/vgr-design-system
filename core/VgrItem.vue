@@ -9,6 +9,8 @@ const props = defineProps<{
   to?: string;
   kbd?: string;
   variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
+  'class:icon'?: string;
+  'class:kbd'?: string;
 }>();
 
 const color = computed(() => {
@@ -38,9 +40,9 @@ function onClick() {
              :data-has-icon="!!icon || null"
              @click="onClick"
   >
-    <vgr-icon v-if="icon" :icon="icon" class="size-4 mr-3 opacity-50 group-hover:opacity-100 [.highlight>&]:opacity-100"/>
+    <vgr-icon v-if="icon" :icon="icon" :class="[props['class:icon']]" class="size-4 mr-3 opacity-50 group-hover:opacity-100 [.highlight>&]:opacity-100"/>
     <span v-else class="hidden [[data-command-palette]_&]:block [[data-item-list]:has(>[data-has-icon])_&]:block w-7"></span>
     <slot/>
-    <span v-if="kbd" class="text-neutral-70 font-mono text-xs ml-auto rounded [[data-command-palette]_&]:p-1 [[data-command-palette]_&]:bg-black/5">{{ kbd }}</span>
+    <span v-if="kbd" :class="[props['class:kbd']]" class="text-neutral-70 font-mono text-xs ml-auto rounded [[data-command-palette]_&]:p-1 [[data-command-palette]_&]:bg-black/5">{{ kbd }}</span>
   </component>
 </template>
