@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import {computed, provide, Ref, ref, watch} from "vue";
 import {searchOutline} from "../icons";
-import {VgrCard, VgrButton, VgrIcon} from "./index";
+import {VgrButton, VgrIcon} from "./index";
+import VgrModal from "./VgrModal.vue";
 
-const props = defineProps<{
-  popover?: boolean;
-}>();
-
-const popoverEl: Ref<HTMLElement> = ref();
+const modal: Ref<HTMLElement> = ref();
 const inputEl: Ref<HTMLElement> = ref();
 const itemListEl: Ref<HTMLElement> = ref();
 const search = ref('');
@@ -16,19 +13,15 @@ const hasFocus = ref(false);
 const numResults = ref(0);
 
 function present() {
-  if(!props.popover) return;
-
   search.value = '';
-  popoverEl.value.showPopover();
+  modal.value.present();
   inputEl.value.focus();
 
   numResults.value = children.value.length;
 }
 
 function dismiss() {
-  if(!props.popover) return;
-
-  popoverEl.value.hidePopover();
+  modal.value.dismiss();
 }
 
 provide('closeMenu', () => dismiss());
@@ -130,32 +123,21 @@ defineExpose({
 </script>
 
 <template>
-  <div ref="popoverEl"
-       :popover="popover ? 'auto' : null"
-       class="bg-transparent p-0"
-       :class="{
-         'size-full backdrop:backdrop-blur-sm backdrop:bg-black/15': popover
-       }"
-  >
-    <div class="absolute size-full" @click="dismiss"></div>
-    <div class="absolute size-full pointer-events-none" :class="{'size-full pt-[10%]': popover}">
-      <vgr-card class="shadow-xl overflow-hidden pointer-events-auto" :class="{'w-[40rem] max-w-[90vw] mx-auto': popover}" data-command-palette>
-        <div class="flex items-center gap-2 px-4 py-2">
-          <vgr-icon :icon="searchOutline" class="size-5 text-neutral-50"/>
-          <input ref="inputEl" v-model="search" type="search"
-                 @keydown="onKeyDown" @focus="onFocus" @blur="onBlur"
-                 class="p-2 flex-1 border-none outline-0" placeholder="Sök..."/>
-          <vgr-button variant="outline" color="neutral" size="small" class="!border border-neutral-70" @click="dismiss">Esc</vgr-button>
-        </div>
-
-        <div ref="itemListEl" class="border-t border-black/20 p-2" @mousemove="onMouseMove">
-          <slot/>
-        </div>
-
-        <div v-if="search && numResults <= 0" class="p-5 text-center font-lg text-neutral-70">
-          Inga resultat för "<span class="text-black">{{ search }}</span>"
-        </div>
-      </vgr-card>
+  <vgr-modal ref="modal" class:body="!p-0" data-command-palette>
+    <div class="flex items-center gap-2 px-4 py-2">
+      <vgr-icon :icon="searchOutline" class="size-5 text-neutral-50"/>
+      <input ref="inputEl" v-model="search" type="search"
+             @keydown="onKeyDown" @focus="onFocus" @blur="onBlur"
+             class="p-2 flex-1 border-none outline-0" placeholder="Sök..."/>
+      <vgr-button variant="outline" color="neutral" size="small" class="!border border-neutral-70" @click="dismiss">Esc</vgr-button>
     </div>
-  </div>
+
+    <div ref="itemListEl" class="border-t border-black/20 p-2" @mousemove="onMouseMove">
+      <slot/>
+    </div>
+
+    <div v-if="search && numResults <= 0" class="p-5 text-center font-lg text-neutral-70">
+      Inga resultat för "<span class="text-black">{{ search }}</span>"
+    </div>
+  </vgr-modal>
 </template>

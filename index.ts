@@ -236,7 +236,11 @@ const defaultTailwindConfig = {
             }
         },
     },
-    plugins: [],
+    plugins: [
+        ({ addVariant }: any) => {
+            addVariant("starting", "@starting-style");
+        },
+    ],
 }
 
 function isObject(item: any) {
