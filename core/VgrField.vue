@@ -2,8 +2,7 @@
 import {provide, ref} from "vue";
 
 const generatedId = ref('vgr-field-' + window.crypto.randomUUID());
-
-provide('id', generatedId);
+provide('field-id', generatedId.value);
 </script>
 
 <template>

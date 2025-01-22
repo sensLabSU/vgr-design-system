@@ -1,7 +1,14 @@
 <script setup>
-import {inject} from "vue";
+import {getCurrentInstance, inject, onMounted, ref} from "vue";
 
-const id = inject('id');
+const id = ref(null);
+
+const instance = getCurrentInstance();
+onMounted(() => {
+  if(!instance.parent.ctx.$el.querySelector('input:not([type="checkbox"]):not([type="radio"]):not([type="image"]):not([type="button"]),textarea')) return;
+
+  id.value = inject('component-id', null) ?? inject('field-id', null);
+});
 </script>
 
 <template>

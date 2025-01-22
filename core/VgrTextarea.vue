@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import {computed, inject, provide, ref} from "vue";
 import Wrap from "../util/wrap.vue";
 import {VgrField, VgrLabel, VgrDescription, VgrError} from "./index";
 
@@ -13,6 +13,10 @@ const props = defineProps<{
 }>();
 
 const wrapWithField = computed(() => props.label || props.description);
+
+const generatedId = ref('vgr-component-' + window.crypto.randomUUID());
+const componentId = inject('field-id', null) ?? generatedId.value;
+provide('component-id', componentId);
 
 const textareaEl = ref();
 const model = defineModel();
@@ -29,7 +33,7 @@ defineExpose({
     <vgr-label v-if="label">{{ label }}</vgr-label>
 
     <div v-bind="$attrs" class="block w-full relative group/input">
-      <textarea ref="textareaEl" rows="4" v-model="model"
+      <textarea ref="textareaEl" rows="4" v-model="model" :id="componentId"
              :class="[props['class:input'], {'!border-error': error}]"
              :placeholder="placeholder"
              class="w-full rounded-md block border border-neutral-80 shadow px-2 py-1"
