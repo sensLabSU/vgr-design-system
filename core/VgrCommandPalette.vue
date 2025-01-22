@@ -126,7 +126,7 @@ defineExpose({
   <vgr-modal ref="modal" class:body="!p-0" data-command-palette>
     <div class="flex items-center gap-2 px-4 py-2">
       <vgr-icon :icon="searchOutline" class="size-5 text-neutral-50"/>
-      <input ref="inputEl" v-model="search" type="search"
+      <input ref="inputEl" v-model="search" type="text"
              @keydown="onKeyDown" @focus="onFocus" @blur="onBlur"
              class="p-2 flex-1 border-none outline-0" placeholder="Sök..."/>
       <vgr-button variant="outline" color="neutral" size="small" class="!border border-neutral-70" @click="dismiss">Esc</vgr-button>

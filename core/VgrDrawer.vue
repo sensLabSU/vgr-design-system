@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {onBeforeUnmount, onMounted, ref, watch} from "vue";
-import VgrCard from "./VgrCard.vue";
 
 defineOptions({
   inheritAttrs: false,
@@ -8,9 +7,6 @@ defineOptions({
 
 const props = defineProps<{
   open?: any;
-  'class:header'?: string;
-  'class:body'?: string;
-  'class:footer'?: string;
   'class:overlay'?: string;
 }>();
 
@@ -24,7 +20,7 @@ const emit = defineEmits<{
 
 const popover = ref();
 const wrapper = ref();
-const card = ref();
+const drawer = ref();
 
 function present() {
   emit('opening');
@@ -65,13 +61,9 @@ function onBeforeToggle(event: Event): void {
   const closing = (event as ToggleEvent).newState === 'closed';
 
   popover.value.classList.toggle('opacity-0', closing);
-  card.value.$el.classList.toggle('-translate-y-[4rem]', closing);
+  drawer.value.classList.toggle('translate-x-full', closing);
 
   document.body.classList.toggle('overflow-hidden', !closing);
-
-  if(!closing) {
-    setTimeout(() => wrapper.value.scrollTo(0,0), 0);
-  }
 
   if(closing) {
     window.removeEventListener('keydown', onKeyPress);
@@ -113,20 +105,13 @@ defineExpose({
 
 <template>
   <div ref="popover" popover="manual" class="size-full fixed bg-transparent starting:opacity-0"  style="transition: opacity 0.25s ease, display 0.25s allow-discrete;">
-    <div ref="wrapper" :class="[props['class:overlay']]" class="absolute inset-0 bg-black/20 py-40 overflow-y-auto" @click="onClickOverlay">
-      <vgr-card v-bind="$attrs" ref="card" role="dialog" class="min-w-[40rem] max-w-full w-min mx-auto transition-transform duration-[250] starting:-translate-y-[4rem]">
-        <header v-if="$slots.header" :class="[props['class:header']]" class="p-5 border-b border-black/20">
-          <slot name="header"/>
-        </header>
-
-        <main class="p-5" :class="[props['class:body']]">
-          <slot/>
-        </main>
-
-        <footer v-if="$slots.footer" :class="[props['class:footer']]" class="p-5 border-t border-black/20">
-          <slot name="footer"/>
-        </footer>
-      </vgr-card>
+    <div ref="wrapper" :class="[props['class:overlay']]" class="absolute inset-0 bg-black/20 overflow-hidden" @click="onClickOverlay">
+      <div v-bind="$attrs" ref="drawer" role="dialog"
+           class="absolute right-0 inset-y-0 min-w-[24rem] bg-white transition-transform duration-[0.25s] starting:translate-x-full
+           after:content-[''] after:absolute after:inset-y-0 after:right-full after:w-4 after:bg-gradient-to-l after:from-black/15
+      ">
+        <slot/>
+      </div>
     </div>
   </div>
 </template>

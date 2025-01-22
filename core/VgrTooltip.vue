@@ -13,12 +13,10 @@ export default {
     const fixed: Ref<boolean> = ref(false);
 
     function showTooltip(e) {
-      const op = e.target.offsetParent;
-      fixed.value = op.tagName !== 'BODY' && ['sticky','fixed'].includes(getComputedStyle(op).position);
       const classes = [
-          (fixed.value ? 'fixed' : 'absolute'),
-          'z-[1000] m-0 pointer-events-none text-sm leading-tight',
-          'bg-base-20 text-white px-3 py-2 rounded-md',
+        'absolute',
+        'z-[1000] m-0 pointer-events-none text-sm leading-tight',
+        'bg-base-20 text-white px-3 py-2 rounded-md',
       ];
 
       let left = e.target.offsetLeft;
@@ -63,21 +61,17 @@ export default {
 
     return () => [
         ...transformedSlotContent,
-        h(Teleport, {
-          to: 'body',
-        }, [
-          h('div', {
-            ref: tooltip,
-            class: 'hidden',
-          }, [
-            h('span', {
-              class: 'whitespace-pre',
-            }, props.text),
-            props.kbd ? h('span', {
-              class: 'font-mono opacity-60 ml-3',
-            }, props.kbd) : null,
-          ]),
-        ]),
+      h('div', {
+        ref: tooltip,
+        class: 'hidden',
+      }, [
+        h('span', {
+          class: 'whitespace-pre',
+        }, props.text),
+        props.kbd ? h('span', {
+          class: 'font-mono opacity-60 ml-3',
+        }, props.kbd) : null,
+      ]),
     ];
   }
 }
