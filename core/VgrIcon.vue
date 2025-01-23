@@ -17,12 +17,12 @@ const svg: ComputedRef<string|null> = computed((): string|null => {
 <template>
   <!-- SVG -->
   <template v-if="svg">
-    <i class="vgr-icon inline-block shrink-0 align-middle *:block *:size-full" v-html="svg"></i>
+    <i class="inline-block shrink-0 align-middle *:block *:size-full" v-html="svg" data-icon></i>
   </template>
 
   <!-- Component -->
   <template v-else>
-    <i class="vgr-icon inline-block align-middle shrink-0">
+    <i class="inline-block align-middle shrink-0" data-icon>
       <component :is="icon" class="size-full"/>
     </i>
   </template>

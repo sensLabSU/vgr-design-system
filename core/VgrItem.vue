@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import {VgrIcon} from "./index";
+import {VgrIcon, VgrBadge} from "./index";
 
 const props = defineProps<{
   is?: string|object;
@@ -8,9 +8,11 @@ const props = defineProps<{
   href?: string;
   to?: string;
   kbd?: string;
+  badge?: string;
   variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
   'class:icon'?: string;
   'class:kbd'?: string;
+  'class:badge'?: string;
 }>();
 
 const color = computed(() => {
@@ -43,6 +45,7 @@ function onClick() {
     <vgr-icon v-if="icon" :icon="icon" :class="[props['class:icon']]" class="size-4 mr-3 opacity-50 group-hover:opacity-100 [.highlight>&]:opacity-100"/>
     <span v-else class="hidden [[data-command-palette]_&]:block [[data-item-list]:has([data-has-icon])_&]:block w-7"></span>
     <slot/>
+    <vgr-badge v-if="badge" :class="[props['class:badge']]" class="ml-auto" color="base">{{ badge }}</vgr-badge>
     <span v-if="kbd" :class="[props['class:kbd']]" class="text-neutral-70 font-mono text-xs ml-auto pl-4 rounded [[data-command-palette]_&]:p-1 [[data-command-palette]_&]:bg-black/5">{{ kbd }}</span>
   </component>
 </template>

@@ -94,7 +94,7 @@ watch(search, val => {
     numResults.value = children.value.length;
   } else {
     children.value.forEach(c => {
-      if(c.textContent.toLowerCase().includes(s)) {
+      if(['A','BUTTON'].includes(c.tagName) && c.textContent.toLowerCase().includes(s)) {
         c.classList.remove('hidden');
       } else {
         c.classList.add('hidden');

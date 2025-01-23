@@ -12,10 +12,10 @@ const is = computed(() => {
 
 const classes = computed(() => {
   switch(props.level) {
-    case '1': return 'text-2xl';
-    case '2': return 'text-xl';
-    case '3': return 'text-lg';
-    default: return 'text-base';
+    case '1': return 'text-2xl font-light';
+    case '2': return 'text-xl font-light';
+    case '3': return 'text-lg font-light';
+    default: return 'text-base font-light';
   }
 });
 </script>
