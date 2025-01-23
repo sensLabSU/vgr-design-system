@@ -2,6 +2,7 @@
 import {computed, ComputedRef} from "vue";
 import {Align} from "../types";
 import {resolveColor} from "../util";
+import VgrIcon from "./VgrIcon.vue";
 
 type ButtonVariant = 'default' | 'filled' | 'outline' | 'ghost' | 'clear';
 type ButtonExpand = 'default' | 'block' | 'full';
@@ -18,6 +19,8 @@ const props = withDefaults(defineProps<{
   expand?: null | ButtonExpand;
   align?: null | Align;
   tabindex?: number;
+  icon?: string | object;
+  'icon:class'?: string;
 }>(), {
   is: 'button',
   type: 'button',
@@ -195,6 +198,7 @@ const classes: ComputedRef<string> = computed((): string => {
              :aria-disabled="disabled ? 'true' : null"
              :tabindex="disabled ? -1 : tabindex"
   >
+    <vgr-icon v-if="icon" :icon="icon" class="size-4" :class="[props['icon:class']]"/>
     <slot/>
   </component>
 </template>

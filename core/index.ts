@@ -22,3 +22,7 @@ export {default as VgrTextarea} from "./VgrTextarea.vue";
 export {default as VgrRadio} from "./VgrRadio.vue";
 export {default as VgrRadioGroup} from "./VgrRadioGroup.vue";
 export {default as VgrBadge} from "./VgrBadge.vue";
+export {default as VgrTabs} from "./VgrTabs.vue";
+export {default as VgrTab} from "./VgrTab.vue";
+export {default as VgrTabGroup} from "./VgrTabGroup.vue";
+export {default as VgrTabPanel} from "./VgrTabPanel.vue";

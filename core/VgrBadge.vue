@@ -94,7 +94,7 @@ const classes = computed(() => {
   }
 
   const colorName = resolveColor(props.color);
-  const color = (typeof(colorName) === 'string') ? colors[colorName] : colors.healthcare;
+  const color = (typeof(colorName) === 'string') ? colors[colorName] : colors.base;
 
   switch(props.variant) {
     case 'solid':
@@ -110,7 +110,7 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <span :class="[classes]">
+  <span :class="[classes]" data-badge>
     <vgr-icon v-if="icon" :icon="icon" class="shrink-0 -ml-0.5"/>
     <slot/>
     <span v-if="$slots.end" class="-mr-0.5">
