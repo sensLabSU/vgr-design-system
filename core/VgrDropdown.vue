@@ -24,12 +24,12 @@ function toggle(): void {
 
   popover.value.togglePopover();
 
-  let left = trigger.value.offsetLeft;
+  let left = op.offsetLeft + trigger.value.offsetLeft;
   if(trigger.value.offsetLeft > window.innerWidth / 2) {
     left += trigger.value.offsetWidth - popover.value.offsetWidth;
   }
 
-  popover.value.style.top = (trigger.value.offsetTop + trigger.value.offsetHeight) + 'px';
+  popover.value.style.top = op.offsetTop + (trigger.value.offsetTop + trigger.value.offsetHeight) + 'px';
   popover.value.style.left = left + 'px';
 }
 

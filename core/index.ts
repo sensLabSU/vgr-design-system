@@ -26,3 +26,5 @@ export {default as VgrTabs} from "./VgrTabs.vue";
 export {default as VgrTab} from "./VgrTab.vue";
 export {default as VgrTabGroup} from "./VgrTabGroup.vue";
 export {default as VgrTabPanel} from "./VgrTabPanel.vue";
+export {default as VgrList} from "./VgrList.vue";
+export {default as VgrListItem} from "./VgrListItem.vue";
