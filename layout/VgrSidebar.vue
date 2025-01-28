@@ -18,7 +18,7 @@ onMounted(() => top.value = bar.value.offsetTop);
 
 <template>
   <nav ref="bar" class="h-auto" data-sidebar>
-    <div v-bind="$attrs" class="w-64 h-full bg-white relative" :class="{'sticky !h-[calc(100vh-var(--top,0px))] top-[--top] z-10': sticky}" :style="{'--top': (sticky ? top : 0) +'px'}">
+    <div v-bind="$attrs" class="w-64 h-full bg-white relative" :class="{'sticky !h-[calc(100vh-var(--top,0px))] top-[--top] z-50': sticky}" :style="{'--top': (sticky ? top : 0) +'px'}">
       <!-- Default slot -->
       <slot/>
       <!-- Shadow -->
