@@ -166,6 +166,13 @@ function xAxisTimeLabels() {
   return labels;
 }
 
+const xAxisLabelModulo = computed(() => {
+  return Math.max(1, Math.ceil(40 / sectionSize.value));
+});
+const xAxisLabelModuloComparer = computed(() => {
+  return Math.floor(xAxisLabelModulo.value / 2);
+})
+
 function getColor(name: string): object {
   const c = resolveColor(name);
   return (typeof c === 'string') ? colors[c] : c;
@@ -297,6 +304,30 @@ provide('chart', {
   }
 });
 
+const tooltip = ref(null);
+function onMouseMove(e) {
+  const t = Math.max(0, Math.min(0.99999, (e.clientX - e.target.offsetLeft) / e.target.offsetWidth));
+  const s = Math.max(0, Math.min(numSections.value - 1, Math.floor(t * numSections.value)));
+
+  tooltip.value = {
+    left: s * sectionSize.value + sectionSize.value * 0.5 + 'px',
+    label: xAxis.value.labels[s],
+    graphs: graphs.value.map(g => {
+      const v = g.data?.[s] ?? null;
+
+      return {
+        name: g.name,
+        color: getColor(g.color),
+        value: v ? (g.format ? formatString(g.format, v) : v) : '-',
+      };
+    }),
+  }
+}
+
+function onMouseLeave(e) {
+  tooltip.value = null;
+}
+
 let resizeTimer = null;
 function onResize() {
   clearTimeout(resizeTimer);
@@ -360,31 +391,52 @@ onBeforeUnmount(() => {
         </template>
       </div>
       <div class="flex-1 flex flex-col">
-        <div class="flex-1 relative" :class="{'border-b border-neutral-80': !!xAxis}">
-          <div ref="graphWrapper" class="absolute inset-0">
+        <div class="flex-1 relative" :class="{'border-b border-neutral-80': !!xAxis}" @mousemove="onMouseMove" @mouseleave="onMouseLeave">
+          <div ref="graphWrapper" class="absolute inset-0 pointer-events-none z-10">
             <svg v-if="size.width > 0" class="w-full h-auto -my-1" :viewBox="`0 -4 ${size.width} ${size.height + 8}`" preserveAspectRatio="none">
               <template v-for="(graph, seriesIndex) in graphs" :key="seriesIndex">
                 <component :is="graph.paths" />
               </template>
             </svg>
-            <div v-if="$slots['donut-center']" class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+            <div v-if="$slots['donut-center']" class="absolute inset-0 flex flex-col items-center justify-center">
               <slot name="donut-center"/>
             </div>
           </div>
+
+          <div v-if="tooltip" :style="{left: tooltip.left}"
+               class="absolute bottom-full -translate-x-1/2 bg-white text-sm rounded-md border border-neutral-80 px-2 py-1 shadow pointer-events-none">
+            <slot name="tooltip" v-bind="tooltip">
+              <div class="text-neutral-60">{{ tooltip.label }}</div>
+              <div class="grid grid-cols-[auto,auto,auto] items-center gap-x-1 *:whitespace-nowrap">
+                <template v-for="graph in tooltip.graphs" :key="graph.name">
+                  <span class="block size-2 rounded-full" :class="[graph.color.bg]"></span>
+                  <span>{{ graph.name }}:</span>
+                  <span class="font-bold">{{ graph.value }}</span>
+                </template>
+              </div>
+            </slot>
+          </div>
+          <div v-if="tooltip" :style="{left: tooltip.left}"
+               class="z-0 absolute inset-y-0 w-px bg-neutral-90 pointer-events-none"></div>
         </div>
         <!-- X Axis -->
         <template v-if="xAxis">
-          <div v-if="xAxis.type === 'time'" class="relative h-5 text-xs text-neutral-60" :class="xAxis.class || null">
+          <div v-if="xAxis.type === 'time'" class="relative h-5 text-xs text-neutral-60" :class="xAxis.class || null" @mousemove="onMouseMove" @mouseleave="onMouseLeave">
             <template v-for="(label, index) in xAxisTimeLabels()" :key="index">
-              <i class="absolute top-0 translate-x-[-0.5px] w-px h-1 bg-neutral-80" :style="{left: label.left}"></i>
-              <span class="absolute top-1 leading-4 -translate-x-1/2" :style="{left: label.left}">{{ label.text }}</span>
+              <i class="absolute top-0 translate-x-[-0.5px] w-px h-1 bg-neutral-80 pointer-events-none" :style="{left: label.left}"></i>
+              <span class="absolute top-1 leading-4 -translate-x-1/2 pointer-events-none" :style="{left: label.left}">{{ label.text }}</span>
             </template>
           </div>
-          <div v-else class="h-5 text-xs text-neutral-60 flex">
-            <div v-for="(label, index) in xAxis.labels" :key="index" class="flex-1 relative h-5" :class="xAxis.class || null">
-              <i class="absolute left-1/2 top-0 translate-x-[-0.5px] w-px h-1 bg-neutral-80"></i>
-              <span class="absolute block inset-x-1 top-1 leading-4 text-center text-ellipsis line-clamp-1">{{ label }}</span>
-            </div>
+          <div v-else class="h-5 text-2xs text-neutral-60 relative" @mousemove="onMouseMove" @mouseleave="onMouseLeave">
+            <i v-for="(label, index) in xAxis.labels" :key="index" :style="{left: (index / numSections) * 100 + (50 / numSections) + '%'}"
+               class="absolute top-0 translate-x-[-0.5px] w-px h-1 bg-neutral-80 pointer-events-none"></i>
+
+            <template v-for="(label, index) in xAxis.labels" :key="index">
+              <span v-if="(index % xAxisLabelModulo) === xAxisLabelModuloComparer" :style="{left: (index / numSections) * 100 + (50 / numSections) + '%'}"
+                    class="absolute top-1 leading-4 text-center text-ellipsis line-clamp-1 whitespace-nowrap -translate-x-1/2 pointer-events-none">
+                {{ label }}
+              </span>
+            </template>
           </div>
         </template>
       </div>

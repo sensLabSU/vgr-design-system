@@ -18,7 +18,7 @@ function onClick() {
 }
 
 function toggle(): void {
-  const op = trigger.value.offsetParent;
+  const op: HTMLElement = trigger.value.offsetParent as HTMLElement;
 
   fixed.value = ['sticky','fixed'].includes(getComputedStyle(op).position);
 
@@ -29,7 +29,7 @@ function toggle(): void {
     left += trigger.value.offsetWidth - popover.value.offsetWidth;
   }
 
-  popover.value.style.top = op.offsetTop + (trigger.value.offsetTop + trigger.value.offsetHeight) + 'px';
+  popover.value.style.top = (fixed.value ? 0 : op.offsetTop) + (trigger.value.offsetTop + trigger.value.offsetHeight) + 'px';
   popover.value.style.left = left + 'px';
 }
 
