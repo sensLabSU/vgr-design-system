@@ -31,3 +31,4 @@ export {default as VgrListItem} from "./VgrListItem.vue";
 export {default as VgrFeed} from "./VgrFeed.vue";
 export {default as VgrFeedItem} from "./VgrFeedItem.vue";
 export {default as VgrCheckbox} from "./VgrCheckbox.vue";
+export {default as VgrToggle} from "./VgrToggle.vue";

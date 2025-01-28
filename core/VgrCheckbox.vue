@@ -4,7 +4,6 @@ import VgrDescription from "./VgrDescription.vue";
 const props = defineProps<{
   label?: string;
   description?: string;
-  value?: any;
 }>();
 
 const model = defineModel();
