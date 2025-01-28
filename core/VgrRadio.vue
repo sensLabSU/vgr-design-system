@@ -29,7 +29,7 @@ const modelProxy = computed({
 </script>
 
 <template>
-  <label class="flex items-start gap-2 mr-auto">
+  <label class="flex items-start gap-2 mr-auto" data-radio>
     <input type="radio" class="size-4 m-1 accent-healthcare-50" :value="value" v-model="modelProxy">
     <span class="flex flex-col gap-0">
       <span class="text-base leading-6">

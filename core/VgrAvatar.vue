@@ -41,7 +41,7 @@ const classes = computed(() => {
 
 <template>
   <div class="inline-block rounded-full overflow-hidden align-middle shadow flex items-center justify-center"
-    :class="classes"
+    :class="classes" data-avatar
   >
     <slot/>
   </div>

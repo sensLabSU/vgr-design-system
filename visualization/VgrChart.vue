@@ -348,7 +348,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <vgr-stack class="aspect-[2/1] w-full" gap="small">
+  <div class="aspect-[2/1] w-full flex flex-col gap-2" data-chart>
     <vgr-stack v-if="legend && !legend.bottom" horizontal class="w-full pb-2 flex-wrap gap-y-1" :class="legend.class || null" :align="legend.align || null">
       <template v-for="(graph, graphIndex) in graphs" :key="graphIndex">
         <div v-if="graph.name" class="flex items-center gap-2 text-sm">
@@ -481,5 +481,5 @@ onBeforeUnmount(() => {
       </template>
     </vgr-stack>
     <slot/>
-  </vgr-stack>
+  </div>
 </template>

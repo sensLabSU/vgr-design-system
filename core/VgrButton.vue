@@ -197,6 +197,7 @@ const classes: ComputedRef<string> = computed((): string => {
              :disabled="disabled"
              :aria-disabled="disabled ? 'true' : null"
              :tabindex="disabled ? -1 : tabindex"
+             data-button
   >
     <vgr-icon v-if="icon" :icon="icon" class="size-4" :class="[props['icon:class']]"/>
     <slot/>

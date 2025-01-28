@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="vgr-content px-10 py-8">
+  <div class="px-10 py-8" data-content>
     <slot/>
   </div>
 </template>

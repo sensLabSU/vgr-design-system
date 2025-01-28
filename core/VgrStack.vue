@@ -45,7 +45,7 @@ const classes: ComputedRef<string> = computed((): string => {
 </script>
 
 <template>
-  <div class="vgr-stack flex" :class="[classes, horizontal ? 'horizontal' : 'vertical']">
+  <div class="flex" :class="[classes, horizontal ? 'horizontal' : 'vertical']" data-stack>
     <slot/>
   </div>
 </template>

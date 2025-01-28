@@ -64,6 +64,7 @@ export default {
       h('div', {
         ref: tooltip,
         class: 'hidden',
+        'data-tooltip': true,
       }, [
         h('span', {
           class: 'whitespace-pre',

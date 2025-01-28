@@ -21,7 +21,7 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <component :is="is" :class="[classes]">
+  <component :is="is" :class="[classes]" data-heading>
     <slot/>
   </component>
 </template>

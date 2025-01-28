@@ -28,7 +28,7 @@ const colors = {
 </script>
 
 <template>
-  <nav class="vgr-navbar w-full p-5 relative z-1 flex items-center gap-4" :class="[
+  <nav class="w-full p-5 relative z-1 flex items-center gap-4" data-navbar :class="[
       colors[resolveColor(color)],
       {'sticky top-0 z-10': sticky},
   ]">

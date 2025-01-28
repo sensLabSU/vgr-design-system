@@ -41,6 +41,7 @@ function onClick() {
              :class="[color]"
              :data-has-icon="!!icon || null"
              @click="onClick"
+             data-item
   >
     <vgr-icon v-if="icon" :icon="icon" :class="[props['class:icon']]" class="size-4 mr-3 opacity-50 group-hover:opacity-100 [.highlight>&]:opacity-100"/>
     <span v-else class="hidden [[data-command-palette]_&]:block [[data-item-list]:has([data-has-icon])_&]:block w-7"></span>
