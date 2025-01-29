@@ -32,3 +32,7 @@ export {default as VgrFeed} from "./VgrFeed.vue";
 export {default as VgrFeedItem} from "./VgrFeedItem.vue";
 export {default as VgrCheckbox} from "./VgrCheckbox.vue";
 export {default as VgrToggle} from "./VgrToggle.vue";
+export {default as VgrTable} from "./VgrTable.vue";
+export {default as VgrTableRow} from "./VgrTableRow.vue";
+export {default as VgrTableHeader} from "./VgrTableHeader.vue";
+export {default as VgrTableCell} from "./VgrTableCell.vue";
