@@ -310,13 +310,15 @@ function onMouseMove(e) {
   const t = Math.max(0, Math.min(0.99999, (e.clientX - e.target.offsetLeft) / e.target.offsetWidth));
   const s = Math.max(0, Math.min(numSections.value - 1, Math.floor(t * numSections.value)));
 
+  const filteredGraphs = graphs.value.filter(g => {
+    return !!g.data;
+  });
+
   tooltip.value = {
     section: s,
     left: s * sectionSize.value + sectionSize.value * 0.5 + 'px',
     label: xAxis.value.labels[s],
-    graphs: graphs.value.filter(g => {
-      return g.data || g.segments;
-    }).map(g => {
+    graphs: filteredGraphs.length ? filteredGraphs.map(g => {
       const v = g.data?.[s] ?? null;
 
       return {
@@ -324,7 +326,7 @@ function onMouseMove(e) {
         color: getColor(g.color),
         value: v ? (g.format ? formatString(g.format, v) : v) : '-',
       };
-    }),
+    }) : undefined,
   }
 }
 
