@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import dayjs from "dayjs";
 import {computed, onBeforeUnmount, onMounted, provide, reactive, Ref, ref} from "vue";
 import {VgrStack} from "../core";
 import {Graph} from "../types";
@@ -103,13 +102,13 @@ const xAxisTimeStart = computed(() => {
   if(!xAxis.value || xAxis.value.type !== 'time') return null;
 
   if(xAxis.value.start) {
-    return dayjs(xAxis.value.start);
+    return new Date(xAxis.value.start);
   }
 
   let from = null;
 
   graphs.value.forEach(graph => {
-    const s = dayjs(graph.start);
+    const s = new Date(graph.start);
 
     if(from === null || s < from) from = s;
   });
@@ -121,13 +120,13 @@ const xAxisTimeEnd = computed(() => {
   if(!xAxis.value || xAxis.value.type !== 'time') return null;
 
   if(xAxis.value.end) {
-    return dayjs(xAxis.value.end);
+    return new Date(xAxis.value.end);
   }
 
   let to = null;
 
   graphs.value.forEach(graph => {
-    const e = dayjs(graph.end);
+    const e = new Date(graph.end);
 
     if(to === null || e < to) to = e;
   });
@@ -138,7 +137,7 @@ const xAxisTimeEnd = computed(() => {
 const xAxisTimeSeconds = computed(() => {
   if(!xAxisTimeStart.value || !xAxisTimeEnd.value) return null;
 
-  return xAxisTimeEnd.value.diff(xAxisTimeStart.value, 'seconds');
+  return (xAxisTimeEnd.value - xAxisTimeStart.value) / 1000;
 });
 
 function xAxisTimeLabels() {
@@ -150,17 +149,17 @@ function xAxisTimeLabels() {
 
   const labels = [];
 
-  let t = xAxisTimeStart.value.startOf('hour').add(1, 'hour');
-  const numHours = xAxisTimeEnd.value.diff(xAxisTimeStart.value, 'hours');
+  let t = new Date(+(new Date(xAxisTimeStart.value)).setMinutes(0, 0, 0) + 3600_000);
+  const numHours = (xAxisTimeEnd.value - xAxisTimeStart.value) / 3600_000;
   const step = size.width ? Math.max(1, (Math.ceil(48 / (size.width / numHours)))) : 1;
 
   while(t < xAxisTimeEnd.value) {
     labels.push({
       left: (((t - xAxisTimeStart.value) / 1000) / span) * 100 + '%',
-      text: t.format('HH:mm'),
+      text: t.toLocaleTimeString().substring(3),
     });
 
-    t = t.add(step, 'hour');
+    t = new Date(+t + (step * 3600_000));
   }
 
   return labels;
@@ -244,7 +243,7 @@ provide('chart', {
     if(xAxis.value?.type === 'time') {
       if(typeof dataPoint !== 'object') throw new Error('Data points needs to be objects when using type="time" for VgrXAxis!');
       if(!dataPoint.dateTime) throw new Error('Data points need a dateTime property when using type="time" for VgrXAxis!');
-      return ((dayjs(dataPoint.dateTime) - xAxisTimeStart.value) / (xAxisTimeEnd.value - xAxisTimeStart.value)) * size.width;
+      return ((new Date(dataPoint.dateTime) - xAxisTimeStart.value) / (xAxisTimeEnd.value - xAxisTimeStart.value)) * size.width;
     }
 
     return (index * sectionSize.value) + sectionSize.value * 0.5;
@@ -306,13 +305,18 @@ provide('chart', {
 
 const tooltip = ref(null);
 function onMouseMove(e) {
+  if(!xAxis.value || xAxis.value.type === 'time') return;
+
   const t = Math.max(0, Math.min(0.99999, (e.clientX - e.target.offsetLeft) / e.target.offsetWidth));
   const s = Math.max(0, Math.min(numSections.value - 1, Math.floor(t * numSections.value)));
 
   tooltip.value = {
+    section: s,
     left: s * sectionSize.value + sectionSize.value * 0.5 + 'px',
     label: xAxis.value.labels[s],
-    graphs: graphs.value.map(g => {
+    graphs: graphs.value.filter(g => {
+      return g.data || g.segments;
+    }).map(g => {
       const v = g.data?.[s] ?? null;
 
       return {
@@ -404,7 +408,7 @@ onBeforeUnmount(() => {
           </div>
 
           <div v-if="tooltip" :style="{left: tooltip.left}"
-               class="absolute bottom-full -translate-x-1/2 bg-white text-sm rounded-md border border-neutral-80 px-2 py-1 shadow pointer-events-none">
+               class="absolute bottom-full -translate-x-1/2 bg-white z-50 text-sm rounded-md border border-neutral-80 px-2 py-1 shadow pointer-events-none">
             <slot name="tooltip" v-bind="tooltip">
               <div class="text-neutral-60">{{ tooltip.label }}</div>
               <div class="grid grid-cols-[auto,auto,auto] items-center gap-x-1 *:whitespace-nowrap">

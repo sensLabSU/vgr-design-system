@@ -1,5 +1,4 @@
 <script lang="ts">
-import dayjs from "dayjs";
 import {Component, h, PropType} from "vue";
 
 export default {
@@ -72,7 +71,7 @@ export default {
         const dataPoint = this.values[i];
 
         const x1 = this.chart.getX(i, dataPoint);
-        const x2 = this.chart.getX(i, {dateTime: dayjs(dataPoint.dateTime).add(dataPoint.seconds, 'seconds').format('YYYY-MM-DD\THH:mm:ss')});
+        const x2 = this.chart.getX(i, {dateTime: (new Date(+new Date(dataPoint.dateTime) + dataPoint.seconds * 1000)).toISOString()});
 
         const nextX1 = i === (n-1) ? null : this.chart.getX(i, this.values[i + 1]);
         const nextY1 = i === (n-1) ? null : this.getSleepY(this.values[i + 1].level);
@@ -118,7 +117,7 @@ export default {
 
       if(this.shortValues?.length) {
         this.shortValues.forEach(dataPoint => {
-          const t1 = dayjs(dataPoint.dateTime).diff(startTime, 'seconds');
+          const t1 = (new Date(dataPoint.dateTime) - new Date(startTime)) / 1000;
           const t2 = t1 + dataPoint.seconds;
 
           const x1 = (t1 / timeSeconds) * chartWidth;
