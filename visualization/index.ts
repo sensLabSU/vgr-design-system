@@ -8,3 +8,4 @@ export {default as VgrGraphSleep} from './VgrGraphSleep.vue';
 export {default as VgrChartLine} from './VgrChartLine.vue';
 export {default as VgrGraphStackedBar} from './VgrGraphStackedBar.vue';
 export {default as VgrChartSection} from './VgrChartSection.vue';
+export {default as VgrTrendLine} from './VgrTrendLine.vue';
