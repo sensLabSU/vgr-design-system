@@ -14,10 +14,6 @@ const props = defineProps<{
 }>();
 
 const table = ref();
-
-onMounted(() => {
-  console.dir(table.value.querySelector('td'));
-});
 </script>
 
 <template>

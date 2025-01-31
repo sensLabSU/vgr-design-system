@@ -4,7 +4,7 @@ import {h, PropType} from "vue";
 export default {
   props: {
     name: String,
-    type: String as PropType<'line'|'bar'|'donut'|'pie'>,
+    type: String as PropType<'line'|'bar'|'dots'|'donut'|'pie'>,
     data: [Array as PropType<number[]>, Number],
     format: String,
     axis: String,
@@ -36,6 +36,7 @@ export default {
     paths(): string|null {
       switch(this.type) {
         case 'line': return this.renderLineGraph();
+        case 'dots': return this.renderDotsGraph();
         case 'bar': return this.renderBarGraph();
         case 'donut': return this.renderDonutSegment();
         case 'pie': return this.renderPieSegment();
@@ -171,6 +172,40 @@ export default {
       const children = [
         h('path', {d: this.linePath(), class: 'fill-none stroke-2 ' + color.stroke}),
       ];
+
+      if(this.detail !== 'none') {
+        const sectionSize = this.chart.getSectionSize();
+        let axis = this.chart.getAxis(this.axis);
+        const [min, max] = [axis.min, axis.max];
+
+        this.values.forEach((dp: number, j) => {
+          if(dp === null) return;
+
+          const x = this.chart.getX(j, dp);
+
+          if(this.detail === 'square') {
+            const d = 'M' + (x - 3.8) + ',' + (this.chart.getY(dp, min, max) - 3.8) + ' l 7.6,0 0,7.6 -7.6,0 Z';
+            children.push(h('path', {d, class:'stroke-none ' + color.fill}));
+          } else if(this.detail === 'triangle') {
+            const d = 'M' + x + ',' + (this.chart.getY(dp, min, max) - 5) + ' l 5,9 -10,0 Z';
+            children.push(h('path', {d, class:'stroke-none ' + color.fill}));
+          } else {
+            children.push(h('circle', {
+              cx: x,
+              cy: this.chart.getY(dp, min, max),
+              r: 4,
+              class: 'stroke-none ' + color.fill,
+            }));
+          }
+        });
+      }
+
+      return h('g', children);
+    },
+    renderDotsGraph() {
+      const color = this.chart.getColor(this.color);
+
+      const children = [];
 
       if(this.detail !== 'none') {
         const sectionSize = this.chart.getSectionSize();
