@@ -1,5 +1,6 @@
 <script lang="ts">
-import {h, PropType} from "vue";
+import type {PropType} from "vue";
+import {VgrChart} from "./index";
 
 export default {
   props: {
@@ -16,10 +17,10 @@ export default {
   created() {
     if(!this.chart) throw new Error('Component VgrXAxis must be used inside VgrChart!');
 
-    this.chart.addXAxis({id: this.id, ...this.$props});
+    (this.chart as typeof VgrChart).addXAxis({id: this.id, ...this.$props});
   },
   beforeUnmount() {
-    this.chart.removeXAxis(this.id);
+    (this.chart as typeof VgrChart).removeXAxis(this.id);
   },
   render() {
     return null;

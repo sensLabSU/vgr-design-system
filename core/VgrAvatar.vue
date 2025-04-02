@@ -27,7 +27,9 @@ const colors = {
 };
 
 const classes = computed(() => {
-  const cls = [colors[resolveColor(props.color, 'education')]];
+  const resolved = resolveColor(props.color || null, 'education');
+
+  const cls = [typeof resolved === 'string' ? (colors as any)[resolved] : resolved.bg];
 
   switch(props.size) {
     case 'large': cls.push('size-12 text-xl'); break;

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import {provide, ref} from "vue";
 
 const generatedId = ref('vgr-field-' + window.crypto.randomUUID());

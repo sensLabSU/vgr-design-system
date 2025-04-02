@@ -1,12 +1,13 @@
 <script lang="ts">
-import {h, PropType} from "vue";
-import {Color} from "../types";
+import type {PropType} from "vue";
+import {h} from "vue";
+import {VgrGraph} from "./index";
 
 export default {
   props: {
     y: Number,
     axis: String,
-    color: String as PropType<Color>,
+    color: String,
     dashed: Boolean,
     thickness: Number as PropType<0.25|0.5|1|2>,
   },
@@ -20,13 +21,13 @@ export default {
   created() {
     if(!this.chart) throw new Error('Component VgrChartLine must be used inside VgrChart!');
 
-    this.chart.addGraph(this);
+    (this.chart as typeof VgrGraph).addGraph(this);
   },
   beforeUnmount() {
-    this.chart.removeGraph(this);
+    (this.chart as typeof VgrGraph).removeGraph(this);
   },
   computed: {
-    paths(): string|null {
+    paths() {
       return this.renderLine();
     },
     stroke() {
@@ -40,16 +41,16 @@ export default {
   },
   methods: {
     linePath(): string {
-      const axis = this.chart.getAxis(this.axis);
+      const axis = (this.chart as typeof VgrGraph).getAxis(this.axis);
 
-      const y = this.chart.getY(this.y, axis.min, axis.max);
+      const y = (this.chart as typeof VgrGraph).getY(this.y, axis.min, axis.max);
       const x1 = 0;
-      const x2 = this.chart.getWidth();
+      const x2 = (this.chart as typeof VgrGraph).getWidth();
 
       return `M${x1},${y} L${x2},${y}`;
     },
     renderLine() {
-      const color = this.chart.getColor(this.color);
+      const color = (this.chart as typeof VgrGraph).getColor(this.color);
 
       return h('path', {
         d: this.linePath(),

@@ -1,5 +1,7 @@
 <script lang="ts">
-import {h, PropType} from "vue";
+import type {PropType} from "vue";
+import {h} from "vue";
+import {VgrChart} from "./index";
 
 export default {
   props: {
@@ -8,6 +10,8 @@ export default {
     color: String,
     dashed: Boolean,
     thickness: Number as PropType<0.25|0.5|1|2>,
+    from: Number,
+    to: Number,
   },
   data() {
     return {
@@ -19,13 +23,13 @@ export default {
   created() {
     if(!this.chart) throw new Error('Component VgrTrendLine must be used inside VgrChart!');
 
-    this.chart.addGraph(this);
+    (this.chart as typeof VgrChart).addGraph(this);
   },
   beforeUnmount() {
-    this.chart.removeGraph(this);
+    (this.chart as typeof VgrChart).removeGraph(this);
   },
   computed: {
-    paths(): string|null {
+    paths() {
       return this.renderLine();
     },
     stroke() {
@@ -42,15 +46,19 @@ export default {
       // Calculate trend line using linear regression
       const xValues = [];
       const yValues = [];
+      const trendStart = this.from ?? 0;
+      const trendTo = this.to ?? this.dataPoints!.length;
       let count = 0;
 
-      this.dataPoints.forEach((dp, i) => {
+      for (let i = trendStart; i < trendTo; i++)
+      {
+        const dp = this.dataPoints![i];
         if(dp) {
           xValues.push(i + 1);
           yValues.push(dp);
           count++;
         }
-      });
+      }
 
       const xSum = xValues.reduce((acc, x) => acc + x, 0);
       const ySum = yValues.reduce((acc, x) => acc + x, 0);
@@ -70,20 +78,20 @@ export default {
       const start = (slope*xValues[0]) + intercept;
       const end = (slope*xValues[count - 1]) + intercept;
 
-      const numSections = this.chart.getNumSections();
-      const sectionSize = this.chart.getSectionSize();
-      const width = this.chart.getWidth();
+      const numSections = (this.chart as typeof VgrChart).getNumSections();
+      const sectionSize = (this.chart as typeof VgrChart).getSectionSize();
+      const width = (this.chart as typeof VgrChart).getWidth();
       const x1 = ((xValues[0] - 1) / numSections) * width + (sectionSize * 0.5);
       const x2 = ((xValues[count - 1] - 1) / numSections) * width + (sectionSize * 0.5);
 
-      const axis = this.chart.getAxis(this.axis);
-      const y1 = this.chart.getY(start, axis.min, axis.max);
-      const y2 = this.chart.getY(end, axis.min, axis.max);
+      const axis = (this.chart as typeof VgrChart).getAxis(this.axis);
+      const y1 = (this.chart as typeof VgrChart).getY(start, axis.min, axis.max);
+      const y2 = (this.chart as typeof VgrChart).getY(end, axis.min, axis.max);
 
       return `M${x1},${y1} L${x2},${y2}`;
     },
     renderLine() {
-      const color = this.chart.getColor(this.color);
+      const color = (this.chart as typeof VgrChart).getColor(this.color);
 
       return h('path', {
         d: this.linePath(),

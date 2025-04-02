@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {Color} from "../types";
+import {computed} from "vue";
 import {resolveColor} from "../util";
 
 const props = defineProps<{
   sticky?: boolean;
-  color?: null | Color;
+  color?: null | string;
 }>();
 
 const colors = {
@@ -25,11 +25,19 @@ const colors = {
   white: 'bg-white text-black',
   black: 'bg-black text-white',
 };
+
+const calculatedColor = computed(() => {
+  const resolved = resolveColor(props.color || null);
+  if(typeof resolved === 'object') return resolved.bg;
+
+  return (colors as any)[resolved];
+})
+
 </script>
 
 <template>
   <nav class="w-full p-5 relative z-50 flex items-center gap-4" data-navbar :class="[
-      colors[resolveColor(color)],
+      calculatedColor,
       {'sticky top-0 z-10': sticky},
   ]">
     <slot/>

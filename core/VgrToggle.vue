@@ -2,7 +2,7 @@
 import {computed} from "vue";
 
 const props = defineProps<{
-  color: string,
+  color?: string,
 }>();
 
 const model = defineModel();

@@ -1,5 +1,6 @@
 const colors = {
     transparent: 'transparent',
+    current: 'currentColor',
     white: '#ffffff',
     black: '#000000',
     neutral: {
@@ -217,7 +218,7 @@ const colors = {
 
 const safelist = [
     {
-        pattern: /!?(bg|text|fill|stroke|border)-(healthcare|culture|education|base|neutral|error|purple|brown|cyan|green|lime|orange|pink|yellow|blue|black|white)-/,
+        pattern: /!?(bg|text|fill|stroke|border)-(healthcare|culture|education|base|neutral|error|purple|brown|cyan|green|lime|orange|pink|yellow|blue|black|white)/,
     },
 ];
 

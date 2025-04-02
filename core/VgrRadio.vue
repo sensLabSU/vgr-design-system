@@ -6,10 +6,13 @@ const props = defineProps<{
   label?: string;
   description?: string;
   value?: any;
+  'label:class'?: string;
+  'description:class'?: string;
+  disabled?: boolean;
 }>();
 
 const model = defineModel();
-const groupModel = inject('model', null);
+const groupModel: any = inject('model', null);
 
 const modelProxy = computed({
   get() {
@@ -29,13 +32,13 @@ const modelProxy = computed({
 </script>
 
 <template>
-  <label class="flex items-start gap-2 mr-auto" data-radio>
-    <input type="radio" class="size-4 m-1 accent-healthcare-50" :value="value" v-model="modelProxy">
+  <label class="flex items-start gap-2 mr-auto select-none" data-radio :class="{'pointer-events-none opacity-65': disabled}">
+    <input type="radio" class="size-4 m-1 accent-healthcare-50" :value="value" v-model="modelProxy" :disabled="disabled">
     <span class="flex flex-col gap-0">
-      <span class="text-base leading-6">
+      <span class="text-base leading-6" :class="[props['label:class']]">
         {{ label }}
       </span>
-      <vgr-description v-if="description">
+      <vgr-description v-if="description" :class="[props['description:class']]">
         {{ description }}
       </vgr-description>
     </span>

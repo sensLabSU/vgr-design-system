@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type {ComputedRef} from "vue";
 import {VgrButton, VgrAvatar, VgrIcon} from "../core";
 import {chevronDown} from '../icons';
-import {computed, ComputedRef} from "vue";
+import {computed} from "vue";
 
 const props = defineProps<{
   name: string;

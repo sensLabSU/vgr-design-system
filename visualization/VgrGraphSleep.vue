@@ -1,5 +1,7 @@
 <script lang="ts">
-import {Component, h, PropType} from "vue";
+import type {Component, PropType} from "vue";
+import {h} from "vue";
+import {VgrChart} from "./index";
 
 export default {
   props: {
@@ -19,10 +21,10 @@ export default {
   created() {
     if(!this.chart) throw new Error('Component VgrGraphSleep must be used inside VgrChart!');
 
-    this.chart.addGraph(this);
+    (this.chart as typeof VgrChart).addGraph(this);
   },
   beforeUnmount() {
-    this.chart.removeGraph(this);
+    (this.chart as typeof VgrChart).removeGraph(this);
   },
   computed: {
     paths(): Component {
@@ -41,8 +43,8 @@ export default {
     },
   },
   methods: {
-    getSleepY(level) {
-      const h = this.chart.getHeight();
+    getSleepY(level: 'wake'|'rem'|'light'|'deep') {
+      const h = (this.chart as typeof VgrChart).getHeight();
       const o = h * 0.015;
       switch(level) {
         case 'wake': return 0 - o;
@@ -56,11 +58,11 @@ export default {
       let prevY2 = null;
       let prevX2 = null;
 
-      const chartWidth = this.chart.getWidth();
-      const chartHeight = this.chart.getHeight();
-      const startTime = this.chart.getXAxisStartTime();
-      const timeSeconds = this.chart.getXAxisTimeSeconds();
-      const n = this.values.length;
+      const chartWidth = (this.chart as typeof VgrChart).getWidth();
+      const chartHeight = (this.chart as typeof VgrChart).getHeight();
+      const startTime = (this.chart as typeof VgrChart).getXAxisStartTime();
+      const timeSeconds = (this.chart as typeof VgrChart).getXAxisTimeSeconds();
+      const n = this.values!.length;
       const path = [];
       const t = 0.5;
 
@@ -68,15 +70,15 @@ export default {
         const tl = i === 0 ? 0 : t;
         const tr = i === (n-1) ? 0 : t;
 
-        const dataPoint = this.values[i];
+        const dataPoint = this.values![i];
 
-        const x1 = this.chart.getX(i, dataPoint);
-        const x2 = this.chart.getX(i, {dateTime: (new Date(+new Date(dataPoint.dateTime) + dataPoint.seconds * 1000)).toISOString()});
+        const x1: number = (this.chart as typeof VgrChart).getX(i, dataPoint);
+        const x2: number = (this.chart as typeof VgrChart).getX(i, {dateTime: (new Date(+new Date(dataPoint.dateTime) + dataPoint.seconds * 1000)).toISOString()});
 
-        const nextX1 = i === (n-1) ? null : this.chart.getX(i, this.values[i + 1]);
-        const nextY1 = i === (n-1) ? null : this.getSleepY(this.values[i + 1].level);
-        const y1 = this.getSleepY(dataPoint.level);
-        const y2 = y1 + chartHeight * 0.06;
+        const nextX1 = i === (n-1) ? null : (this.chart as typeof VgrChart).getX(i, this.values![i + 1]);
+        const nextY1 = i === (n-1) ? null : this.getSleepY(this.values![i + 1].level);
+        const y1: number = this.getSleepY(dataPoint.level);
+        const y2: number = y1 + chartHeight * 0.06;
 
         const r = Math.min((x2 - x1) / 2, (y2 - y1) / 2);
 
@@ -117,7 +119,7 @@ export default {
 
       if(this.shortValues?.length) {
         this.shortValues.forEach(dataPoint => {
-          const t1 = (new Date(dataPoint.dateTime) - new Date(startTime)) / 1000;
+          const t1 = (+(new Date(dataPoint.dateTime)) - +(new Date(startTime))) / 1000;
           const t2 = t1 + dataPoint.seconds;
 
           const x1 = (t1 / timeSeconds) * chartWidth;

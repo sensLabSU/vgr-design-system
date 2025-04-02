@@ -49,8 +49,8 @@ function close() {
   emit('wantsToClose');
 }
 
-function onClickOverlay(e) {
-  if(e.target.closest('[role="dialog"]')) return;
+function onClickOverlay(e: MouseEvent) {
+  if((e.target as HTMLElement).closest('[role="dialog"]')) return;
 
   close();
 }

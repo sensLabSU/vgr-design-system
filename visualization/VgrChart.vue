@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import {computed, onBeforeUnmount, onMounted, provide, reactive, Ref, ref} from "vue";
+import type {ComputedRef, Ref} from "vue";
+import type {Graph} from "../types";
+import {computed, onBeforeUnmount, onMounted, onUpdated, provide, reactive, ref} from "vue";
 import {VgrStack} from "../core";
-import {Graph} from "../types";
 import {formatString, resolveColor} from "../util";
+import {VgrLegend, VgrXAxis, VgrYAxis} from "./index";
+
+const props = defineProps<{
+  tooltip?: 'default' | 'all' | 'hide-empty';
+  tooltipEmptyText?: string;
+}>();
 
 const colors = {
   'black': {stroke: 'stroke-black', fill: 'fill-black', bg: 'bg-black'},
@@ -24,11 +31,11 @@ const colors = {
   'blue': {stroke: 'stroke-blue-70', fill: 'fill-blue-70', bg: 'bg-blue-70'},
 };
 
-const graphWrapper: Ref<HTMLElement> = ref();
-const legend: Ref<object|null> = ref(null);
-const leftAxi: Ref<object[]> = ref([]);
-const rightAxi: Ref<object[]> = ref([]);
-const xAxis: Ref<object|null> = ref(null);
+const graphWrapper: Ref<HTMLElement> = ref(null as unknown as HTMLElement);
+const legend: Ref<typeof VgrLegend|null> = ref(null);
+const leftAxi: Ref<typeof VgrYAxis[]> = ref([]);
+const rightAxi: Ref<typeof VgrYAxis[]> = ref([]);
+const xAxis: Ref<typeof VgrXAxis|null> = ref(null);
 const graphs: Ref<Graph[]> = ref([]);
 const size = reactive({width: 0, height: 0});
 const numSections = computed(() => {
@@ -55,7 +62,7 @@ const numBars = computed(() => {
   return n;
 });
 const barOffsets = computed(() => {
-  const offsets = {};
+  const offsets: {[key: string]: number} = {};
   let offset = 0;
 
   graphs.value.forEach(graph => {
@@ -79,7 +86,7 @@ const barsOffset = computed(() => {
 const barRadius = computed(() => {
   return barWidth.value * 0.25;
 });
-const noAxis = computed(() => {
+const noAxis: ComputedRef<typeof VgrXAxis> = computed(() => {
   const axis = {min: Number.MAX_VALUE, max: Number.MIN_VALUE};
 
   graphs.value.forEach(graph => {
@@ -88,14 +95,14 @@ const noAxis = computed(() => {
     }
 
     if(graph.values?.length) {
-      graph.values.forEach(dp => {
+      graph.values.forEach((dp: number) => {
         if(dp < axis.min) axis.min = dp;
         if(dp > axis.max) axis.max = dp;
       });
     }
   });
 
-  return axis;
+  return axis as unknown as typeof VgrXAxis;
 });
 
 const xAxisTimeStart = computed(() => {
@@ -105,7 +112,7 @@ const xAxisTimeStart = computed(() => {
     return new Date(xAxis.value.start);
   }
 
-  let from = null;
+  let from: Date|null = null;
 
   graphs.value.forEach(graph => {
     const s = new Date(graph.start);
@@ -123,7 +130,7 @@ const xAxisTimeEnd = computed(() => {
     return new Date(xAxis.value.end);
   }
 
-  let to = null;
+  let to: Date|null = null;
 
   graphs.value.forEach(graph => {
     const e = new Date(graph.end);
@@ -137,11 +144,11 @@ const xAxisTimeEnd = computed(() => {
 const xAxisTimeSeconds = computed(() => {
   if(!xAxisTimeStart.value || !xAxisTimeEnd.value) return null;
 
-  return (xAxisTimeEnd.value - xAxisTimeStart.value) / 1000;
+  return (+xAxisTimeEnd.value - +xAxisTimeStart.value) / 1000;
 });
 
 function xAxisTimeLabels() {
-  const span = (xAxisTimeEnd.value - xAxisTimeStart.value) / 1000;
+  const span = (+xAxisTimeEnd.value! - +xAxisTimeStart.value!) / 1000;
 
   if(span > 24 * 3600) {
     throw new Error('Sleep data can only be displayed for 1 day!');
@@ -149,13 +156,13 @@ function xAxisTimeLabels() {
 
   const labels = [];
 
-  let t = new Date(+(new Date(xAxisTimeStart.value)).setMinutes(0, 0, 0) + 3600_000);
-  const numHours = (xAxisTimeEnd.value - xAxisTimeStart.value) / 3600_000;
+  let t = new Date(+(new Date(xAxisTimeStart.value!)).setMinutes(0, 0, 0) + 3600_000);
+  const numHours = (+xAxisTimeEnd.value! - +xAxisTimeStart.value!) / 3600_000;
   const step = size.width ? Math.max(1, (Math.ceil(48 / (size.width / numHours)))) : 1;
 
-  while(t < xAxisTimeEnd.value) {
+  while(t < xAxisTimeEnd.value!) {
     labels.push({
-      left: (((t - xAxisTimeStart.value) / 1000) / span) * 100 + '%',
+      left: (((+t - +xAxisTimeStart.value!) / 1000) / span) * 100 + '%',
       text: t.toLocaleTimeString().substring(3),
     });
 
@@ -172,43 +179,50 @@ const xAxisLabelModuloComparer = computed(() => {
   return Math.floor(xAxisLabelModulo.value / 2);
 })
 
-function getColor(name: string): object {
+function getColor(name: string): {
+  fill: string;
+  bg: string;
+  stroke: string;
+  text: string;
+} {
   const c = resolveColor(name);
-  return (typeof c === 'string') ? colors[c] : c;
+  return (typeof c === 'string') ? (colors as any)[c] : c;
 }
 
 provide('chart', {
-  addLegend(options) {
+  addLegend(options: typeof VgrLegend) {
     legend.value = options;
   },
-  removeLegend(id) {
+  removeLegend(id: string) {
     legend.value = null;
   },
-  addYAxis(options) {
+  addYAxis(options: typeof VgrYAxis) {
     if(options.right) {
       rightAxi.value.push(options);
     } else {
       leftAxi.value.push(options);
     }
   },
-  removeYAxis(id) {
+  removeYAxis(id: string) {
     rightAxi.value = rightAxi.value.filter(i => i.id !== id);
     leftAxi.value = leftAxi.value.filter(i => i.id !== id);
   },
-  addXAxis(options) {
+  addXAxis(options: typeof VgrXAxis) {
     xAxis.value = options;
   },
-  removeXAxis(id) {
+  removeXAxis(id: string) {
     xAxis.value = null;
   },
   addGraph(graph: Graph) {
     graphs.value.push(graph);
   },
   removeGraph(graph: Graph) {
-    graphs.value = graphs.value.filter(i => i.id !== graph.id);
+    const filtered = graphs.value.filter(i => i.id !== graph.id);
+    graphs.value = [];
+    graphs.value = filtered;
   },
   getAxis(identifier: string) {
-    let axis = [...leftAxi.value, ...rightAxi.value]?.[0];
+    let axis: typeof VgrYAxis = [...leftAxi.value, ...rightAxi.value]?.[0];
 
     if([...leftAxi.value, ...rightAxi.value].length > 1) {
       axis = [...leftAxi.value, ...rightAxi.value].filter(i => i.identifier === identifier)?.[0] ?? null;
@@ -216,7 +230,7 @@ provide('chart', {
     }
 
     if(!axis) {
-      axis = noAxis.value;
+      axis = noAxis.value as typeof VgrYAxis;
     }
 
     return axis;
@@ -243,7 +257,7 @@ provide('chart', {
     if(xAxis.value?.type === 'time') {
       if(typeof dataPoint !== 'object') throw new Error('Data points needs to be objects when using type="time" for VgrXAxis!');
       if(!dataPoint.dateTime) throw new Error('Data points need a dateTime property when using type="time" for VgrXAxis!');
-      return ((new Date(dataPoint.dateTime) - xAxisTimeStart.value) / (xAxisTimeEnd.value - xAxisTimeStart.value)) * size.width;
+      return ((+new Date(dataPoint.dateTime!) - +xAxisTimeStart.value!) / (+xAxisTimeEnd.value! - +xAxisTimeStart.value!)) * size.width;
     }
 
     return (index * sectionSize.value) + sectionSize.value * 0.5;
@@ -303,11 +317,11 @@ provide('chart', {
   }
 });
 
-const tooltip = ref(null);
-function onMouseMove(e) {
+const tooltip: Ref<any> = ref(null);
+function onMouseMove(e: MouseEvent) {
   if(!xAxis.value || xAxis.value.type === 'time') return;
 
-  const t = Math.max(0, Math.min(0.99999, (e.clientX - e.target.offsetLeft) / e.target.offsetWidth));
+  const t = Math.max(0, Math.min(0.99999, (e.clientX - (e.target! as HTMLElement).offsetLeft) / (e.target! as HTMLElement).offsetWidth));
   const s = Math.max(0, Math.min(numSections.value - 1, Math.floor(t * numSections.value)));
 
   const filteredGraphs = graphs.value.filter(g => {
@@ -321,22 +335,30 @@ function onMouseMove(e) {
     graphs: filteredGraphs.length ? filteredGraphs.map(g => {
       const v = g.data?.[s] ?? null;
 
+      if(props.tooltip === 'hide-empty' && [NaN,null,undefined].includes(v)) {
+        return null;
+      }
+
+      if(g.type === 'span') {
+        return null;
+      }
+
       return {
         name: g.name,
         color: getColor(g.color),
         value: v ? (g.format ? formatString(g.format, v) : v) : '-',
       };
-    }) : undefined,
+    }).filter(v => !!v) : undefined,
   }
 }
 
-function onMouseLeave(e) {
+function onMouseLeave(e: MouseEvent) {
   tooltip.value = null;
 }
 
-let resizeTimer = null;
+let resizeTimer: number|null = null;
 function onResize() {
-  clearTimeout(resizeTimer);
+  clearTimeout(resizeTimer!);
   resizeTimer = setTimeout(updateSize, 300);
 }
 function updateSize() {
@@ -351,6 +373,42 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.addEventListener('resize', onResize);
 });
+onUpdated(() => {
+  updateSize();
+});
+
+const bollingerBandsComponents = computed(() => {
+  return graphs.value.filter(g => {
+    return g.$data.id.includes('bollinger-bands');
+  });
+});
+
+const sectionComponents = computed(() => {
+  return graphs.value.filter(g => {
+    return g.$data.id.includes('chart-section');
+  });
+});
+
+function getTicks(axis: typeof VgrYAxis) {
+  if(!axis.ticks) return null;
+
+  let n = 0;
+  if(axis.steps) {
+    n = axis.steps.length - 1;
+  } else {
+    n = Math.round((axis.max - axis.min) / axis.ticks);
+  }
+
+  if(!n) return [];
+
+  const res = [];
+  for(let i = 0; i <= n; i++)
+  {
+    res.push(i / n);
+  }
+
+  return res;
+}
 </script>
 
 <template>
@@ -369,10 +427,16 @@ onBeforeUnmount(() => {
           <span>{{ graph.name }}</span>
         </div>
       </template>
+      <template v-for="bc in bollingerBandsComponents" :key="bc.id">
+        <div v-if="bc.legendText" class="flex items-center gap-2 text-sm">
+          <span class="block size-2 rounded-full" :class="[getColor(bc.strokeColor || bc.fillColor).bg]"/>
+          <span>{{ bc.legendText }}</span>
+        </div>
+      </template>
     </vgr-stack>
 
-    <div class="flex-1 flex w-full pt-2" :class="{'pb-2': !xAxis}">
-      <div v-if="leftAxi?.length" class="flex gap-3" :class="{'pb-5': xAxis}">
+    <div class="flex-1 flex w-full" :class="{'pb-2': !xAxis, 'pt-2': !sectionComponents.length}">
+      <div v-if="leftAxi?.length" class="flex gap-3" :class="{'pb-5': xAxis, 'pt-5': sectionComponents.length}">
         <template v-for="(axis, index) in leftAxi" :key="index">
           <div class="flex gap-1">
             <div v-if="axis.label" class="text-xs text-neutral-60 relative w-4">
@@ -380,16 +444,26 @@ onBeforeUnmount(() => {
             </div>
             <div class="border-r border-neutral-80 text-2xs text-neutral-60 flex flex-col" :class="axis.class || null">
               <template v-if="axis.steps">
-                <div class="flex flex-col-reverse justify-between items-end leading-4 -my-2 flex-1 pr-1">
-                  <div v-for="(step, si) in axis.steps" :key="si">
-                    {{ (typeof step === 'number' && axis.format) ? formatString(axis.format, step) : step }}
+                <div class="relative flex flex-col flex-1 h-full">
+                  <div class="flex flex-col-reverse justify-between items-end leading-4 -my-2 flex-1 pr-2">
+                    <div v-for="(step, si) in axis.steps" :key="si">
+                      {{ (typeof step === 'number' && axis.format) ? formatString(axis.format, step) : step }}
+                    </div>
                   </div>
+                  <template v-if="axis.ticks">
+                    <i v-for="(t,i) in getTicks(axis)" :key="i" class="absolute block right-0 w-1.5 h-px -mt-[0.5px] bg-neutral-80 -mr-px" :style="{bottom: (t * 100) + '%'}"></i>
+                  </template>
                 </div>
               </template>
               <template v-else-if="axis.min !== undefined && axis.max !== undefined">
-                <div class="flex flex-col justify-between items-end leading-4 -my-2 flex-1 pr-1">
-                  <div>{{ formatString(axis.format ?? '{0:N0}', axis.max) }}</div>
-                  <div>{{ formatString(axis.format ?? '{0:N0}', axis.min) }}</div>
+                <div class="relative flex flex-col flex-1 h-full">
+                  <div class="flex flex-col justify-between items-end leading-4 -my-2 flex-1 pr-2">
+                    <div>{{ formatString(axis.format ?? '{0:N0}', axis.max) }}</div>
+                    <div>{{ formatString(axis.format ?? '{0:N0}', axis.min) }}</div>
+                  </div>
+                  <template v-if="axis.ticks">
+                    <i v-for="(t,i) in getTicks(axis)" :key="i" class="absolute block right-0 w-1.5 h-px -mt-[0.5px] bg-neutral-80 -mr-px" :style="{bottom: (t * 100) + '%'}"></i>
+                  </template>
                 </div>
               </template>
             </div>
@@ -397,10 +471,15 @@ onBeforeUnmount(() => {
         </template>
       </div>
       <div class="flex-1 flex flex-col">
+        <div v-if="sectionComponents.length" class="h-5 leading-5 text-2xs relative border-b border-neutral-90">
+          <span v-for="sc in sectionComponents" :key="sc.id" class="absolute bottom-0" :style="{
+            left: (sc.from / numSections) * 100 + '%',
+          }">{{ sc.label }}</span>
+        </div>
         <div class="flex-1 relative" :class="{'border-b border-neutral-80': !!xAxis}" @mousemove="onMouseMove" @mouseleave="onMouseLeave">
-          <div ref="graphWrapper" class="absolute inset-0 pointer-events-none z-10">
-            <svg v-if="size.width > 0" class="w-full h-auto -my-1" :viewBox="`0 -4 ${size.width} ${size.height + 8}`" preserveAspectRatio="none">
-              <template v-for="(graph, seriesIndex) in graphs" :key="seriesIndex">
+          <div ref="graphWrapper" class="absolute inset-0 pointer-events-none overflow-hidden z-10">
+            <svg v-if="size.width > 0" class="absolute w-full h-[calc(100%+0.5rem)] -mt-1" :viewBox="`0 -4 ${size.width} ${size.height + 8}`" preserveAspectRatio="none">
+              <template v-for="(graph, seriesIndex) in graphs" :key="graph.id">
                 <component :is="graph.paths" />
               </template>
             </svg>
@@ -410,15 +489,20 @@ onBeforeUnmount(() => {
           </div>
 
           <div v-if="tooltip" :style="{left: tooltip.left}"
-               class="absolute bottom-full -translate-x-1/2 bg-white z-50 text-sm rounded-md border border-neutral-80 px-2 py-1 shadow pointer-events-none">
+               class="absolute bottom-full -translate-x-1/2 bg-white z-40 text-sm rounded-md border border-neutral-80 px-2 py-1 shadow pointer-events-none">
             <slot name="tooltip" v-bind="tooltip">
               <div class="text-neutral-60">{{ tooltip.label }}</div>
               <div class="grid grid-cols-[auto,auto,auto] items-center gap-x-1 *:whitespace-nowrap">
-                <template v-for="graph in tooltip.graphs" :key="graph.name">
-                  <span class="block size-2 rounded-full" :class="[graph.color.bg]"></span>
-                  <span>{{ graph.name }}:</span>
-                  <span class="font-bold">{{ graph.value }}</span>
+                <template v-if="tooltip.graphs?.length">
+                  <template v-for="graph in tooltip.graphs" :key="graph.name">
+                    <span class="block size-2 rounded-full" :class="[graph.color.bg]"></span>
+                    <span>{{ graph.name }}:</span>
+                    <span class="font-bold">{{ graph.value }}</span>
+                  </template>
                 </template>
+                <div v-else class="text-neutral-70">
+                  {{ tooltipEmptyText ?? 'Inga värden att visa' }}
+                </div>
               </div>
             </slot>
           </div>
@@ -446,7 +530,7 @@ onBeforeUnmount(() => {
           </div>
         </template>
       </div>
-      <div v-if="rightAxi?.length" class="flex gap-3" :class="{'pb-5': xAxis}">
+      <div v-if="rightAxi?.length" class="flex gap-3" :class="{'pb-5': xAxis, 'pt-5': sectionComponents.length}">
         <template v-for="(axis, index) in rightAxi" :key="index">
           <div class="flex gap-1">
             <div class="border-l border-neutral-80 text-2xs text-neutral-60 flex flex-col" :class="axis.class || null">
@@ -458,9 +542,14 @@ onBeforeUnmount(() => {
                 </div>
               </template>
               <template v-else-if="axis.min !== undefined && axis.max !== undefined">
-                <div class="flex flex-col justify-between items-start leading-4 -my-2 flex-1 pl-1">
-                  <div>{{ formatString(axis.format ?? '{0:N0}', axis.max) }}</div>
-                  <div>{{ formatString(axis.format ?? '{0:N0}', axis.min) }}</div>
+                <div class="relative flex flex-col flex-1 h-full">
+                  <div class="flex flex-col justify-between items-start leading-4 -my-2 flex-1 pl-2">
+                    <div>{{ formatString(axis.format ?? '{0:N0}', axis.max) }}</div>
+                    <div>{{ formatString(axis.format ?? '{0:N0}', axis.min) }}</div>
+                  </div>
+                  <template v-if="axis.ticks">
+                    <i v-for="(t,i) in getTicks(axis)" :key="i" class="absolute block left-0 w-1.5 h-px -mt-[0.5px] bg-neutral-80 -ml-px" :style="{bottom: (t * 100) + '%'}"></i>
+                  </template>
                 </div>
               </template>
             </div>

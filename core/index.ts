@@ -36,3 +36,4 @@ export {default as VgrTable} from "./VgrTable.vue";
 export {default as VgrTableRow} from "./VgrTableRow.vue";
 export {default as VgrTableHeader} from "./VgrTableHeader.vue";
 export {default as VgrTableCell} from "./VgrTableCell.vue";
+export {default as VgrBreadcrumbs} from "./VgrBreadcrumbs.vue";

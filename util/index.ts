@@ -1,7 +1,7 @@
-import useKeyboardShortcuts from "./useKeyboardShortcuts";
+import type {ColorName} from "../types";
 
-function formatString(format, ...args) {
-    const matchCode = function (code, val) {
+function formatString(format: string, ...args: (string|number)[]) {
+    const matchCode = function (code: string, val: number) {
         switch (code) {
             case 'ddd': {
                 const v = Math.floor(val / 86400);
@@ -50,7 +50,7 @@ function formatString(format, ...args) {
         return null;
     }
 
-    const formatCustom = function (format, arg) {
+    const formatCustom = function (format: string, arg: string|number) {
         return format.replace(/\[(.*?)]|('.*?')|([A-Z]+)/ig, (full, brackets, str, code) => {
             const neg = +arg < 0;
             const val = Math.round(Math.abs(+arg));
@@ -61,13 +61,13 @@ function formatString(format, ...args) {
                 }
 
                 let failed = false;
-                const bracketResult = brackets.replace(/('.*?')|([A-Z]+)/ig, (f, s, c) => {
+                const bracketResult = brackets.replace(/('.*?')|([A-Z]+)/ig, (f: string, s: string, c: string) => {
                     if (s) {
                         return s.substring(1, s.length - 1);
                     }
 
                     const cr = matchCode(c, val);
-                    if (+cr === 0) {
+                    if (+cr! === 0) {
                         failed = true;
                         return '';
                     }
@@ -89,7 +89,7 @@ function formatString(format, ...args) {
         });
     }
 
-    return format.replace(/\{(\d+)(?::([A-Z':.\-_\[\] ]+)(\d+)?)?}/ig, (full, index, type, precision) => {
+    const replacer: any = (full: string, index: number, type: string, precision: number) => {
         const upperType = type ? type.toUpperCase() : type;
 
         const defaultPrecision = 2;
@@ -145,16 +145,20 @@ function formatString(format, ...args) {
         }
 
         return args[index];
-    });
+    };
+
+    return format.replace(/\{(\d+)(?::([A-Z':.\-_\[\] ]+)(\d+)?)?}/ig, replacer);
 }
 
 const colorNamesWithLevels = ['healthcare', 'culture', 'education', 'base', 'neutral', 'error', 'purple', 'brown', 'cyan', 'green', 'lime', 'orange', 'pink', 'yellow', 'blue'];
 const allColorNames = [...colorNamesWithLevels, 'white', 'black'];
 
-const colorNameRegex = new RegExp('^(' + colorNamesWithLevels.join('|') + ')\:(\\d{1,2})$');
+const colorNameRegex = new RegExp('^(' + colorNamesWithLevels.join('|') + ')(?:\:(\\d{1,2}))?(?:\/(\\d{1,2}))?$');
 
-function resolveColor(name: string, defaultColor = 'healthcare'): string|object {
-    if(allColorNames.includes(name)) return name;
+function resolveColor(name: string|null, defaultColor: ColorName = 'healthcare'): ColorName|{fill: string, stroke: string, bg: string, text: string} {
+    if(!name) return defaultColor;
+
+    if(allColorNames.includes(name)) return name as ColorName;
 
     switch(name) {
         case 'red':
@@ -170,10 +174,10 @@ function resolveColor(name: string, defaultColor = 'healthcare'): string|object 
     const matches = colorNameRegex.exec(name);
     if(matches) {
         return {
-            fill: `fill-${matches[1]}-${matches[2]}`,
-            stroke: `stroke-${matches[1]}-${matches[2]}`,
-            bg: `bg-${matches[1]}-${matches[2]}`,
-            text: `text-${matches[1]}-${matches[2]}`,
+            fill: `fill-${matches[1]}${matches[2] ? '-'+matches[2] : ''}${matches[3] ? '/'+matches[3] : ''}`,
+            stroke: `stroke-${matches[1]}${matches[2] ? '-'+matches[2] : ''}${matches[3] ? '/'+matches[3] : ''}`,
+            bg: `bg-${matches[1]}${matches[2] ? '-'+matches[2] : ''}${matches[3] ? '/'+matches[3] : ''}`,
+            text: `text-${matches[1]}${matches[2] ? '-'+matches[2] : ''}${matches[3] ? '/'+matches[3] : ''}`,
         };
     }
 

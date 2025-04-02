@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {computed, ComputedRef} from "vue";
+import type {ComputedRef} from "vue";
+import {computed} from "vue";
 
 const props = defineProps<{
   icon: string | object;

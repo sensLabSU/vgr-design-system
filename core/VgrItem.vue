@@ -13,6 +13,7 @@ const props = defineProps<{
   'class:icon'?: string;
   'class:kbd'?: string;
   'class:badge'?: string;
+  dontCloseOnClick?: boolean;
 }>();
 
 const color = computed(() => {
@@ -28,6 +29,7 @@ const color = computed(() => {
 const closeMenu = inject('closeMenu', () => {});
 
 function onClick() {
+  if(props.dontCloseOnClick) return;
   closeMenu();
 }
 </script>

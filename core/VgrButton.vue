@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import {computed, ComputedRef} from "vue";
-import {Align} from "../types";
+import type {ComputedRef} from 'vue';
+import type {Align} from "../types";
+import {computed} from "vue";
 import {resolveColor} from "../util";
 import VgrIcon from "./VgrIcon.vue";
 
@@ -135,7 +136,7 @@ const classes: ComputedRef<string> = computed((): string => {
     }
   }
 
-  const colorName = resolveColor(props.color);
+  const colorName = resolveColor(props.color || null);
   const color = (typeof(colorName) === 'string') ? colors[colorName] : colors.healthcare;
 
   switch(props.variant) {

@@ -1,5 +1,6 @@
 <script lang="ts">
-import {h, PropType} from "vue";
+import type {PropType} from "vue";
+import {VgrChart} from "./index";
 
 export default {
   props: {
@@ -11,6 +12,7 @@ export default {
     class: String,
     steps: Array as PropType<string[]>,
     label: String,
+    ticks: Number,
   },
   data: () => ({
       id: 'vgr-y-axis-' + Math.random() * 1000000,
@@ -19,10 +21,10 @@ export default {
   created() {
     if(!this.chart) throw new Error('Component VgrYAxis must be used inside VgrChart!');
 
-    this.chart.addYAxis({id: this.id, ...this.$props});
+    (this.chart as typeof VgrChart).addYAxis({id: this.id, ...this.$props});
   },
   beforeUnmount() {
-    this.chart.removeYAxis(this.id);
+    (this.chart as typeof VgrChart).removeYAxis(this.id);
   },
   render() {
     return null;

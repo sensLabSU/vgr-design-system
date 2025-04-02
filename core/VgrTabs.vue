@@ -7,11 +7,11 @@ const props = defineProps<{
 
 const slots = useSlots();
 const model = defineModel({type: String, default: null});
-const onTabChanged = inject('on-tab-changed', () => {});
+const onTabChanged = inject('on-tab-changed', (name: string) => {});
 
 onMounted(() => {
   if(!model.value) {
-    model.value = slots.default()?.[0]?.props.name;
+    model.value = slots.default?.()?.[0]?.props?.name ?? null;
   }
 
   onTabChanged(model.value);
@@ -34,12 +34,12 @@ const classes = computed(() => {
   return cls.join(' ');
 });
 
-function activateTab(name) {
+function activateTab(name: string) {
   model.value = name;
   onTabChanged(name);
 }
 
-provide('variant', props.variant);
+provide('variant', props.variant || 'default');
 provide('active-tab', model);
 provide('activate-tab', activateTab);
 </script>

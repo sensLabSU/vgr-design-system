@@ -45,8 +45,8 @@ function close() {
   emit('wantsToClose');
 }
 
-function onClickOverlay(e) {
-  if(e.target.closest('[role="dialog"]')) return;
+function onClickOverlay(e: MouseEvent) {
+  if((e.target! as HTMLElement).closest('[role="dialog"]')) return;
 
   close();
 }
@@ -60,8 +60,13 @@ function onKeyPress(event: KeyboardEvent) {
 function onBeforeToggle(event: Event): void {
   const closing = (event as ToggleEvent).newState === 'closed';
 
-  popover.value.classList.toggle('opacity-0', closing);
-  drawer.value.classList.toggle('translate-x-full', closing);
+  if(closing) {
+    popover.value.classList.add('opacity-0');
+  } else {
+    setTimeout(() => {
+      popover.value.classList.remove('opacity-0');
+    }, 1);
+  }
 
   document.body.classList.toggle('overflow-hidden', !closing);
 
@@ -104,10 +109,10 @@ defineExpose({
 </script>
 
 <template>
-  <div ref="popover" popover="manual" class="size-full fixed bg-transparent starting:opacity-0" data-drawer style="transition: opacity 0.25s ease, display 0.25s allow-discrete;">
+  <div ref="popover" popover="manual" class="size-full fixed bg-transparent inset-0 !m-0 opacity-0 z-[10000] transform-gpu" data-drawer style="transition: opacity 0.25s ease, display 0.25s allow-discrete;">
     <div ref="wrapper" :class="[props['class:overlay']]" class="absolute inset-0 bg-black/20 overflow-hidden" @click="onClickOverlay">
       <div v-bind="$attrs" ref="drawer" role="dialog"
-           class="absolute right-0 inset-y-0 min-w-[24rem] bg-white transition-transform duration-[0.25s] starting:translate-x-full
+           class="absolute right-0 inset-y-0 min-w-[24rem] bg-white
            after:content-[''] after:absolute after:inset-y-0 after:right-full after:w-4 after:bg-gradient-to-l after:from-black/15
       ">
         <slot/>

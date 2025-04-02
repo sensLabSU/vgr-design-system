@@ -1,7 +1,7 @@
 import {onBeforeUnmount} from "vue";
 
 class KeyboardShortcutManager {
-    boundKeys = {};
+    boundKeys: {[key: string]: KeyboardShortcut[]} = {};
 
     constructor() {
         window.addEventListener('keydown', (e) => {
@@ -11,7 +11,7 @@ class KeyboardShortcutManager {
                     return;
                 }
                 if(focused.tagName === 'INPUT') {
-                    if(['text','search','password','email','tel','date','datetime-local','month','number','time','url','week'].includes(focused.getAttribute('type')))
+                    if(['text','search','password','email','tel','date','datetime-local','month','number','time','url','week'].includes(focused.getAttribute('type')!))
                         return;
                 }
             }
@@ -51,7 +51,7 @@ class KeyboardShortcutManager {
 const keyboardShortcutManager = new KeyboardShortcutManager();
 
 class KeyboardShortcut {
-    callback: () => void;
+    callback: () => void = () => {};
 
     _key: string;
     _withCtrl?: boolean = false;

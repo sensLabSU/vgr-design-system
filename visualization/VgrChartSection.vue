@@ -1,14 +1,15 @@
 <script lang="ts">
-import {h, PropType} from "vue";
-import {Color} from "../types";
+import type {PropType} from "vue";
+import {h} from "vue";
+import {VgrGraph} from "./index";
 
 export default {
   props: {
     from: Number,
     to: Number,
     axis: String,
-    fillColor: String as PropType<Color>,
-    strokeColor: String as PropType<Color>,
+    fillColor: String,
+    strokeColor: String,
     dashed: Boolean,
     edgeThickness: Number as PropType<0.25|0.5|1|2>,
     label: String,
@@ -23,13 +24,13 @@ export default {
   created() {
     if(!this.chart) throw new Error('Component VgrChartSection must be used inside VgrChart!');
 
-    this.chart.addGraph(this);
+    (this.chart as typeof VgrGraph).addGraph(this);
   },
   beforeUnmount() {
-    this.chart.removeGraph(this);
+    (this.chart as typeof VgrGraph).removeGraph(this);
   },
   computed: {
-    paths(): string|null {
+    paths() {
       return this.renderSection();
     },
     stroke() {
@@ -43,26 +44,26 @@ export default {
   },
   methods: {
     fillPath(): string {
-      const numSections = this.chart.getNumSections();
-      const width = this.chart.getWidth();
-      const h = this.chart.getHeight();
-      const x1 = (this.from / numSections) * width;
-      const x2 = (this.to / numSections) * width;
+      const numSections = (this.chart as typeof VgrGraph).getNumSections();
+      const width = (this.chart as typeof VgrGraph).getWidth();
+      const h = (this.chart as typeof VgrGraph).getHeight();
+      const x1 = (this.from! / numSections) * width;
+      const x2 = (this.to! / numSections) * width;
 
       return `M${x1},0 L${x1},${h} L${x2},${h} L${x2},0 Z`;
     },
     linePath(): string {
-      const numSections = this.chart.getNumSections();
-      const width = this.chart.getWidth();
-      const h = this.chart.getHeight();
-      const x1 = (this.from / numSections) * width;
-      const x2 = (this.to / numSections) * width;
+      const numSections = (this.chart as typeof VgrGraph).getNumSections();
+      const width = (this.chart as typeof VgrGraph).getWidth();
+      const h = (this.chart as typeof VgrGraph).getHeight();
+      const x1 = (this.from! / numSections) * width;
+      const x2 = (this.to! / numSections) * width;
 
       return this.to ? `M${x1},0 L${x1},${h} M${x2},${h} L${x2},0` : `M${x1},0 L${x1},${h}`;
     },
     renderSection() {
-      const fillColor = this.chart.getColor(this.fillColor);
-      const strokeColor = this.chart.getColor(this.strokeColor);
+      const fillColor = (this.chart as typeof VgrGraph).getColor(this.fillColor);
+      const strokeColor = (this.chart as typeof VgrGraph).getColor(this.strokeColor);
 
       return h('g', [
         this.to ? h('path', {
@@ -74,11 +75,6 @@ export default {
           class: this.stroke + ' ' + strokeColor.stroke,
           'stroke-dasharray': this.dashed ? 5 : null,
         }) : null,
-        this.label ? h('text', {
-          x: (this.from / this.chart.getNumSections()) * this.chart.getWidth() + 3,
-          y: 12,
-          class: 'fill-black text-xs',
-        }, [this.label]) : null,
       ]);
     },
   },

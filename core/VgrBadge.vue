@@ -9,6 +9,7 @@ const props = defineProps<{
   color?: null | string;
   pill?: boolean;
   icon?: string | object;
+  'icon:class'?: string;
 }>();
 
 const colors = {
@@ -93,7 +94,7 @@ const classes = computed(() => {
     case 'large': cls.push('py-1.5 text-sm [&>[data-icon]]:size-4 ' + (props.pill ? 'px-3' : 'px-2')); break;
   }
 
-  const colorName = resolveColor(props.color);
+  const colorName = resolveColor(props.color || null);
   const color = (typeof(colorName) === 'string') ? colors[colorName] : colors.base;
 
   switch(props.variant) {
@@ -111,7 +112,7 @@ const classes = computed(() => {
 
 <template>
   <span :class="[classes]" data-badge>
-    <vgr-icon v-if="icon" :icon="icon" class="shrink-0 -ml-0.5"/>
+    <vgr-icon v-if="icon" :icon="icon" class="shrink-0 -ml-0.5" :class="[props['icon:class']]"/>
     <slot/>
     <span v-if="$slots.end" class="-mr-0.5">
       <slot name="end"/>

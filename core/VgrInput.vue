@@ -10,6 +10,7 @@ const props = defineProps<{
   'class:input'?: string;
   placeholder?: string;
   error?: string;
+  disabled?: boolean;
 }>();
 
 const wrapWithField = computed(() => props.label || props.description);
@@ -22,9 +23,10 @@ const inputEl = ref();
 const model = defineModel();
 
 const focus = () => inputEl.value.focus();
+const select = () => inputEl.value.select();
 
 defineExpose({
-  focus,
+  focus, select,
 });
 </script>
 
@@ -34,9 +36,10 @@ defineExpose({
 
     <div v-bind="$attrs" class="block w-full relative group/input">
       <input ref="inputEl" :type="type || 'text'" v-model="model" :id="componentId"
-             :class="[props['class:input'], {'!border-error': error}]"
+             :class="[props['class:input'], {'!border-error': error, 'pointer-events-none opacity-50 cursor-default': disabled}]"
              :placeholder="placeholder"
-             class="w-full rounded-md block border border-neutral-80 shadow px-2 py-1"
+             :disabled="disabled"
+             class="w-full rounded-md block border border-neutral-80 bg-white shadow px-2 py-1"
              data-input>
     </div>
 

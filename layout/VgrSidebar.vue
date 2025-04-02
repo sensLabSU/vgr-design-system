@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {onMounted, onUpdated, Ref, ref} from "vue";
+import type {Ref} from "vue";
+import {onMounted, onUpdated, ref} from "vue";
 
 defineOptions({
   inheritAttrs: false,

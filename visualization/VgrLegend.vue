@@ -1,5 +1,6 @@
 <script lang="ts">
-import {h, PropType} from "vue";
+import type {PropType} from "vue";
+import {VgrChart} from "./index";
 
 export default {
   props: {
@@ -11,10 +12,10 @@ export default {
   created() {
     if(!this.chart) throw new Error('Component VgrLegend must be used inside VgrChart!');
 
-    this.chart.addLegend({...this.$props});
+    (this.chart as typeof VgrChart).addLegend({...this.$props});
   },
   beforeUnmount() {
-    this.chart.removeLegend(null);
+    (this.chart as typeof VgrChart).removeLegend(null);
   },
   render() {
     return null;

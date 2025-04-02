@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import {computed, ComputedRef} from "vue";
+import type {ComputedRef} from "vue";
+import {computed} from "vue";
 
 const props = defineProps<{
   horizontal?: boolean;
   gap?: null | 'none' | 'x-small' | 'small' | 'default' | 'normal' | 'large' | 'x-large';
-  align?: null | 'default' | 'left' | 'start' | 'center' | 'middle' | 'right' | 'end';
+  align?: null | 'default' | 'left' | 'start' | 'center' | 'middle' | 'right' | 'end' | 'between' | 'around' | 'evenly';
 }>();
 
 const classes: ComputedRef<string> = computed((): string => {
@@ -30,6 +31,15 @@ const classes: ComputedRef<string> = computed((): string => {
     case 'right':
     case 'end':
       cls.push('justify-end');
+      break;
+    case 'between':
+      cls.push('justify-between');
+      break;
+    case 'around':
+      cls.push('justify-around');
+      break;
+    case 'evenly':
+      cls.push('justify-evenly');
       break;
     default:
       cls.push('justify-center');

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import {onBeforeUnmount, onMounted, Ref, ref} from "vue";
-import {provide} from "vue";
+import type {Ref} from "vue";
+import {onBeforeUnmount, onMounted, ref, provide} from "vue";
 
 provide('closeMenu', () => {
   popover.value.hidePopover();
 });
 
-const trigger: Ref<HTMLElement> = ref();
-const popover: Ref<HTMLElement> = ref();
+const trigger: Ref<HTMLElement> = ref(null as unknown as HTMLElement);
+const popover: Ref<HTMLElement> = ref(null as unknown as HTMLElement);
 const fixed: Ref<boolean> = ref(false);
 const isOpen: Ref<boolean> = ref(false);
 
@@ -24,17 +24,36 @@ function toggle(): void {
 
   popover.value.togglePopover();
 
-  let left = op.offsetLeft + trigger.value.offsetLeft;
-  if(trigger.value.offsetLeft > window.innerWidth / 2) {
+  let offsetLeft = 0;
+  let offsetTop = 0;
+  let offsetParent: HTMLElement|null = trigger.value.offsetParent as HTMLElement|null;
+  if(offsetParent) {
+    for(let i = 0; i < 100; i++) {
+      offsetLeft += offsetParent!.offsetLeft;
+      offsetTop += offsetParent!.offsetTop;
+      offsetParent = offsetParent!.offsetParent as HTMLElement|null;
+      if(offsetParent === null || offsetParent.tagName === 'BODY') break;
+    }
+  }
+
+  let left = offsetLeft + trigger.value.offsetLeft;
+  if(left > window.innerWidth / 2) {
     left += trigger.value.offsetWidth - popover.value.offsetWidth;
   }
 
-  popover.value.style.top = (fixed.value ? 0 : op.offsetTop) + (trigger.value.offsetTop + trigger.value.offsetHeight) + 'px';
+  let top = (fixed.value ? 0 : offsetTop) + (trigger.value.offsetTop + trigger.value.offsetHeight);
+  if(top + popover.value.offsetHeight - window.scrollY > window.innerHeight) {
+    top = (fixed.value ? 0 : offsetTop) + trigger.value.offsetTop - popover.value.offsetHeight;
+  }
+
+  popover.value.style.top = top + 'px';
   popover.value.style.left = left + 'px';
 }
 
 function onBeforeToggle(event: Event): void {
-  popover.value.classList.toggle('opacity-0', (event as ToggleEvent).newState === 'closed');
+  const isClosing = (event as ToggleEvent).newState === 'closed';
+  popover.value.classList.toggle('opacity-0', isClosing);
+  document.body.classList.toggle('overflow-hidden', !isClosing);
 }
 
 function onToggle(event: Event): void {

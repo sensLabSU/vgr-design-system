@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type {Ref} from "vue";
 import {provide, ref} from "vue";
 
-const model = ref(null);
+const model: Ref<string|null> = ref(null);
 
-function onTabChanged(name) {
+function onTabChanged(name: string) {
   model.value = name;
 }
 

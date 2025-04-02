@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import {computed, provide, Ref, ref, watch} from "vue";
+import type {Ref} from "vue";
+import {computed, provide, ref, watch} from "vue";
 import {searchOutline} from "../icons";
 import {VgrButton, VgrIcon} from "./index";
 import VgrModal from "./VgrModal.vue";
 
-const modal: Ref<HTMLElement> = ref();
-const inputEl: Ref<HTMLElement> = ref();
-const itemListEl: Ref<HTMLElement> = ref();
-const search = ref('');
-const selectedIndex = ref(0);
-const hasFocus = ref(false);
-const numResults = ref(0);
+const modal: Ref<typeof VgrModal> = ref(null as unknown as typeof VgrModal);
+const inputEl: Ref<HTMLInputElement> = ref(null as unknown as HTMLInputElement);
+const itemListEl: Ref<HTMLElement> = ref(null as unknown as HTMLElement);
+const search: Ref<string> = ref('');
+const selectedIndex: Ref<number> = ref(0);
+const hasFocus: Ref<boolean> = ref(false);
+const numResults: Ref<number> = ref(0);
 
 function present() {
   search.value = '';
@@ -42,7 +43,7 @@ function filteredChildren() {
   return children.value.filter(c => ['A','BUTTON'].includes(c.tagName) && !c.classList.contains('hidden'));
 }
 
-function onKeyDown(e) {
+function onKeyDown(e: KeyboardEvent) {
   if(selectedIndex.value < 0) {
     return;
   }
@@ -81,7 +82,7 @@ function updateHighlight() {
   }
 }
 
-const children = computed(() => [...itemListEl.value.children]);
+const children = computed(() => [...((itemListEl.value?.children || []) as any)]);
 
 watch(search, val => {
   selectedIndex.value = 0;
@@ -94,7 +95,7 @@ watch(search, val => {
     numResults.value = children.value.length;
   } else {
     children.value.forEach(c => {
-      if(['A','BUTTON'].includes(c.tagName) && c.textContent.toLowerCase().includes(s)) {
+      if(['A','BUTTON'].includes(c.tagName) && c.textContent!.toLowerCase().includes(s)) {
         c.classList.remove('hidden');
       } else {
         c.classList.add('hidden');
@@ -106,8 +107,8 @@ watch(search, val => {
   updateHighlight();
 });
 
-function onMouseMove(e) {
-  const el = e.target.closest('a,button');
+function onMouseMove(e: MouseEvent) {
+  const el = (e.target! as HTMLElement).closest('a,button');
   if(!el) return;
 
   const filtered = filteredChildren();
