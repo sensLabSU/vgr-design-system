@@ -20,7 +20,7 @@ const props = defineProps<{
       </span>
       <div class="hidden [[data-feed-item]:last-child_&]:block flex-1 bg-white -mt-1"></div>
     </div>
-    <div class="flex-1 flex items-start *:leading-5" :class="{'px-2.5 py-1.5 rounded-md border border-neutral-80 bg-white': type === 'comment'}">
+    <div class="flex-1 flex items-start *:leading-5" :class="{'px-2.5 py-1.5 rounded-md border border-neutral-90 bg-neutral-95': type === 'comment'}">
       <div class="py-1 text-sm">
         <slot/>
       </div>

@@ -112,7 +112,7 @@ defineExpose({
 </script>
 
 <template>
-  <div ref="popover" popover="manual" class="size-full fixed bg-transparent starting:opacity-0" data-modal style="transition: opacity 0.25s ease, display 0.25s allow-discrete;">
+  <div ref="popover" popover="manual" class="size-full fixed bg-transparent starting:opacity-0 !m-0" data-modal style="transition: opacity 0.25s ease, display 0.25s allow-discrete;">
     <div ref="wrapper" :class="[props['class:overlay']]" class="absolute inset-0 bg-black/20 py-40 overflow-y-auto" @click="onClickOverlay">
       <vgr-card v-bind="$attrs" ref="card" role="dialog" class="min-w-[40rem] max-w-full w-min mx-auto transition-transform duration-[250] starting:-translate-y-[4rem]">
         <header v-if="$slots.header" :class="[props['class:header']]" class="p-5 border-b border-black/20">
