@@ -3,8 +3,9 @@ import {computed} from "vue";
 import {resolveColor} from "../util";
 
 const props = defineProps<{
-  size?: null | 'default' | 'small' | 'large';
+  size?: null | 'default' | 'small' | 'large' | 'x-small' | 'x-large';
   color?: string | null;
+  variant?: null | 'default' | 'rounded' | 'square';
 }>();
 
 const colors = {
@@ -32,9 +33,17 @@ const classes = computed(() => {
   const cls = [typeof resolved === 'string' ? (colors as any)[resolved] : resolved.bg];
 
   switch(props.size) {
-    case 'large': cls.push('size-12 text-xl'); break;
+    case 'x-large': cls.push('size-16 text-3xl'); break;
+    case 'large': cls.push('size-12 text-2xl'); break;
     case 'small': cls.push('size-6 text-xs'); break;
+    case 'x-small': cls.push('size-5 text-2xs'); break;
     default: cls.push('size-8 text-base'); break;
+  }
+
+  switch(props.variant) {
+    case 'rounded': cls.push('rounded-[20%]'); break;
+    case 'square': cls.push('rounded-[5%]'); break;
+    default: cls.push('rounded-full'); break;
   }
 
   return cls.join(' ');
@@ -42,7 +51,7 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <div class="inline-block rounded-full overflow-hidden align-middle shadow flex items-center justify-center"
+  <div class="inline-block overflow-hidden align-middle shadow flex items-center justify-center"
     :class="classes" data-avatar
   >
     <slot/>

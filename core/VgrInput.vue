@@ -13,6 +13,13 @@ const props = defineProps<{
   disabled?: boolean;
 }>();
 
+const emit = defineEmits<{
+  blur: void;
+  focus: void;
+  input: [InputEvent];
+  change: [Event];
+}>();
+
 const wrapWithField = computed(() => props.label || props.description);
 
 const generatedId = ref('vgr-component-' + window.crypto.randomUUID());
@@ -23,10 +30,11 @@ const inputEl = ref();
 const model = defineModel();
 
 const focus = () => inputEl.value.focus();
+const blur = () => inputEl.value.blur();
 const select = () => inputEl.value.select();
 
 defineExpose({
-  focus, select,
+  focus, blur, select,
 });
 </script>
 
@@ -40,7 +48,12 @@ defineExpose({
              :placeholder="placeholder"
              :disabled="disabled"
              class="w-full rounded-md block border border-neutral-80 bg-white shadow px-2 py-1"
-             data-input>
+             data-input
+             @focus="$emit('focus')"
+             @blur="$emit('blur')"
+             @input="$emit('input', $event as InputEvent)"
+             @change="$emit('change', $event as Event)"
+      >
     </div>
 
     <vgr-description v-if="description">{{ description }}</vgr-description>
