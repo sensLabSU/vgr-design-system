@@ -10,6 +10,7 @@ const props = defineProps<{
   pill?: boolean;
   icon?: string | object;
   'icon:class'?: string;
+  is?: null | 'span' | 'button';
 }>();
 
 const colors = {
@@ -106,16 +107,20 @@ const classes = computed(() => {
       break;
   }
 
+  if(props.is === 'button') {
+    cls.push('cursor-pointer hover:ring-1 hover:ring-current active:opacity-80');
+  }
+
   return cls.join(' ');
 });
 </script>
 
 <template>
-  <span :class="[classes]" data-badge>
+  <component :is="is || 'span'" :type="is === 'button' ? 'button' : null" :class="[classes]" data-badge>
     <vgr-icon v-if="icon" :icon="icon" class="shrink-0 -ml-0.5" :class="[props['icon:class']]"/>
     <slot/>
     <span v-if="$slots.end" class="-mr-0.5">
       <slot name="end"/>
     </span>
-  </span>
+  </component>
 </template>
