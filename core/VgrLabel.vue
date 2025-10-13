@@ -2,6 +2,10 @@
 import type {Ref} from "vue";
 import {getCurrentInstance, inject, onMounted, ref} from "vue";
 
+const props = defineProps<{
+  for?: string;
+}>();
+
 const id: Ref<string|null> = ref(null);
 
 const instance = getCurrentInstance();
@@ -13,7 +17,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <label class="block text-sm font-medium" :for="id ?? undefined" data-label>
+  <label class="block text-sm font-medium" :for="props.for ?? id ?? undefined" data-label>
     <slot/>
   </label>
 </template>

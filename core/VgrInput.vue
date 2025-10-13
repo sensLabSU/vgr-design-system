@@ -4,6 +4,7 @@ import Wrap from "../util/wrap.vue";
 import {VgrField, VgrLabel, VgrDescription, VgrError} from "./index";
 
 const props = defineProps<{
+  id?: string;
   type?: string;
   label?: string;
   description?: string;
@@ -23,7 +24,7 @@ const emit = defineEmits<{
 const wrapWithField = computed(() => props.label || props.description);
 
 const generatedId = ref('vgr-component-' + window.crypto.randomUUID());
-const componentId = inject('field-id', null) ?? generatedId.value;
+const componentId = props.id ?? inject('field-id', null) ?? generatedId.value;
 provide('component-id', componentId);
 
 const inputEl = ref();
