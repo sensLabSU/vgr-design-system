@@ -14,6 +14,13 @@ const props = defineProps<{
   rows?: number;
 }>();
 
+const emit = defineEmits<{
+  blur: void;
+  focus: void;
+  input: [InputEvent];
+  change: [Event];
+}>();
+
 const wrapWithField = computed(() => props.label || props.description);
 
 const generatedId = ref('vgr-component-' + window.crypto.randomUUID());
@@ -24,9 +31,11 @@ const textareaEl: Ref<HTMLTextAreaElement> = ref(undefined as unknown as HTMLTex
 const model: ModelRef<any> = defineModel();
 
 const focus = () => textareaEl.value.focus();
+const blur = () => textareaEl.value.blur();
+const select = () => textareaEl.value.select();
 
 defineExpose({
-  focus,
+  focus, blur, select,
 });
 </script>
 
@@ -41,6 +50,10 @@ defineExpose({
              class="w-full rounded-md block border border-neutral-80 shadow px-2 py-1"
              data-textarea
              :maxlength="max !== undefined ? `${max}` : undefined"
+              @focus="$emit('focus')"
+              @blur="$emit('blur')"
+              @input="$emit('input', $event as InputEvent)"
+              @change="$emit('change', $event as Event)"
       ></textarea>
 
       <div v-if="max !== undefined" class="mt-1 text-right text-xs text-neutral-60">
