@@ -11,16 +11,19 @@ const props = defineProps<{
   lines?: boolean;
   verticalLines?: boolean;
   striped?: boolean;
+  'class:wrapper'?: string;
+  'class:head'?: string;
+  'class:body'?: string;
 }>();
 
 const table = ref();
 </script>
 
 <template>
-  <div class="[[data-card]>&]:rounded-md overflow-hidden" :class="{
+  <div class="[[data-card]>&]:rounded-md overflow-hidden" :class="[{
     'w-full !overflow-x-auto relative': overflowX === 'scroll',
     'max-h-[70vh] overflow-y-scroll': overflowY === 'scroll',
-  }">
+  }, props['class:wrapper']]">
     <table ref="table" v-bind="$attrs" class="
       w-full [[data-card]_&]:bg-white [[data-card]_&_*:is(td,th)]:bg-white
       [&_th]:text-left [&_th]:whitespace-nowrap [&_th]:border-b [&_*]:border-neutral-90 [&_th]:font-semibold
@@ -31,12 +34,12 @@ const table = ref();
       '[&_*:is(td,th)+*]:border-l': verticalLines,
       '[&_tr:nth-child(2n-1)>td]:bg-[rgb(0_0_0/0.035)] [[data-card]_&_tr:nth-child(2n-1)>td]:bg-neutral-99 [&_*:is(td,th)]:!p-4': striped,
     }">
-      <thead v-if="$slots.header">
+      <thead v-if="$slots.header" :class="props['class:head']">
         <tr>
           <slot name="header"/>
         </tr>
       </thead>
-      <tbody>
+      <tbody :class="props['class:body']">
         <slot/>
       </tbody>
     </table>
