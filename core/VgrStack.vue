@@ -6,6 +6,7 @@ const props = defineProps<{
   horizontal?: boolean;
   gap?: null | 'none' | 'x-small' | 'small' | 'default' | 'normal' | 'large' | 'x-large';
   align?: null | 'default' | 'left' | 'start' | 'center' | 'middle' | 'right' | 'end' | 'between' | 'around' | 'evenly';
+  axisAlign?: null | 'default' | 'start' | 'middle' | 'end';
 }>();
 
 const classes: ComputedRef<string> = computed((): string => {
@@ -43,6 +44,18 @@ const classes: ComputedRef<string> = computed((): string => {
       break;
     default:
       cls.push('justify-center');
+      break;
+  }
+
+  switch(props.axisAlign) {
+    case 'middle':
+      cls.push('items-center');
+      break;
+    case 'end':
+      cls.push('items-end');
+      break;
+    default:
+      cls.push('items-start');
       break;
   }
 
