@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <ul class="overflow-hidden [[data-card]>&]:rounded-md" data-list>
+  <ul class="overflow-hidden [[data-card]>&]:rounded-md" role="list" data-list>
     <slot/>
   </ul>
 </template>

@@ -10,7 +10,7 @@ const props = defineProps<{
   <li class="
     relative flex items-center justify-between py-5 [[data-card]>[data-list]>&]:px-5
     [[data-list]>[data-list-item]+&]:border-t [[data-list]>[data-list-item]+&]:border-neutral-80
-  " data-list-item>
+  " data-list-item role="listitem">
     <div class="flex-1 flex items-center gap-4" :class="[props['col1:class']]">
       <slot/>
     </div>
