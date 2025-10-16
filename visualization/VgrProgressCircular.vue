@@ -44,7 +44,7 @@ function circleFill(percent: number, thickness = 0.1, padding = 0) {
 <template>
   <div class="flex items-center justify-center relative">
     <svg viewBox="-1 -1 2 2" class="size-full">
-      <path :d="circleFill(1, thickness, 0.01)" class="fill-neutral-80" :class="{'stroke-[0.03] stroke-neutral-80': stroke}"/>
+      <path :d="circleFill(1, thickness, 0.01)" class="fill-neutral-80 dark:fill-neutral-10" :class="{'stroke-[0.03] stroke-neutral-80 dark:stroke-neutral-10': stroke}"/>
       <path :d="circleFill(fill, thickness, 0.01)" :class="colorClass"/>
     </svg>
     <div v-if="$slots.default"
