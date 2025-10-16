@@ -47,7 +47,7 @@ defineExpose({
       <textarea ref="textareaEl" :rows="rows ?? 4" v-model="model" :id="componentId"
              :class="[props['class:input'], {'!border-error': error}]"
              :placeholder="placeholder"
-             class="w-full rounded-md block border border-neutral-80 shadow px-2 py-1"
+             class="w-full rounded-md block border border-neutral-80 dark:bg-base-10 dark:border-base-40 shadow px-2 py-1"
              data-textarea
              :maxlength="max !== undefined ? `${max}` : undefined"
               @focus="$emit('focus')"

@@ -25,6 +25,7 @@ const colors = {
   yellow: 'bg-yellow-80 text-yellow-30',
   white: 'bg-white text-black',
   black: 'bg-black text-white',
+  blue: 'bg-blue-80 text-text-blue-30',
 };
 
 const classes = computed(() => {

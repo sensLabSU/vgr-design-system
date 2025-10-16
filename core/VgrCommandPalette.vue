@@ -126,19 +126,19 @@ defineExpose({
 <template>
   <vgr-modal ref="modal" class:body="!p-0" data-command-palette>
     <div class="flex items-center gap-2 px-4 py-2">
-      <vgr-icon :icon="searchOutline" class="size-5 text-neutral-50"/>
+      <vgr-icon :icon="searchOutline" class="size-5 text-neutral-50 dark:text-neutral-70"/>
       <input ref="inputEl" v-model="search" type="text"
              @keydown="onKeyDown" @focus="onFocus" @blur="onBlur"
-             class="p-2 flex-1 border-none outline-0" placeholder="Sök..."/>
-      <vgr-button variant="outline" color="neutral" size="small" class="!border border-neutral-70" @click="dismiss">Esc</vgr-button>
+             class="p-2 flex-1 border-none outline-0 bg-white dark:bg-base-20 dark:text-white" placeholder="Sök..."/>
+      <vgr-button variant="outline" color="neutral" size="small" class="!border border-neutral-70 dark:border-neutral-80" @click="dismiss">Esc</vgr-button>
     </div>
 
-    <div ref="itemListEl" class="border-t border-black/20 p-2" @mousemove="onMouseMove">
+    <div ref="itemListEl" class="border-t border-black/20 dark:border-white/20 p-2" @mousemove="onMouseMove">
       <slot/>
     </div>
 
     <div v-if="search && numResults <= 0" class="p-5 text-center font-lg text-neutral-70">
-      Inga resultat för "<span class="text-black">{{ search }}</span>"
+      Inga resultat för "<span class="text-black dark:text-white">{{ search }}</span>"
     </div>
   </vgr-modal>
 </template>

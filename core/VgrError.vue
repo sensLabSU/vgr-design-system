@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="text-sm text-error" data-error>
+  <div class="text-sm text-error dark:text-error-70" data-error>
     <slot/>
   </div>
 </template>

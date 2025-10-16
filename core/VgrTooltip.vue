@@ -16,7 +16,7 @@ export default {
       const classes = [
         'absolute',
         'z-[1000] m-0 pointer-events-none text-sm leading-tight',
-        'bg-base-20 text-white px-3 py-2 rounded-md',
+        'bg-base-20 dark:bg-black text-white px-3 py-2 rounded-md',
       ];
 
       let left = (e.target! as HTMLElement).offsetLeft;

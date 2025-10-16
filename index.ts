@@ -223,6 +223,7 @@ const safelist = [
 ];
 
 const defaultTailwindConfig = {
+    darkMode: 'selector',
     content: [
         "./index.html",
         "./src/**/*.{html,js,ts,vue}",

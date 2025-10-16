@@ -22,13 +22,13 @@ const classes = computed(() => {
 
   switch(props.variant) {
     case 'bar':
-      cls.push('items-stretch justify-center gap-px bg-neutral-90 mx-auto rounded-lg overflow-hidden shadow w-min'); break;
+      cls.push('items-stretch justify-center gap-px bg-neutral-90 dark:bg-base-40 mx-auto rounded-lg overflow-hidden shadow w-min'); break;
     case 'pills':
       cls.push('items-center justify-center gap-4'); break;
     case 'segmented':
-      cls.push('items-stretch justify-center p-1 mx-auto bg-neutral-90 rounded-lg w-min'); break;
+      cls.push('items-stretch justify-center p-1 mx-auto bg-neutral-90 dark:bg-base-30 rounded-lg w-min'); break;
     default:
-      cls.push('[[data-card]_&]:px-5 items-stretch gap-8 justify-start border-b border-b-neutral-80'); break;
+      cls.push('[[data-card]_&]:px-5 items-stretch gap-8 justify-start border-b border-b-neutral-80 dark:border-b-neutral-70'); break;
   }
 
   return cls.join(' ');

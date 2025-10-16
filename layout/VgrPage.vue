@@ -4,7 +4,8 @@
 
 <template>
   <div class="
-    bg-neutral-95 w-full min-h-screen grid grid-cols-[1fr] grid-rows-[1fr]
+    bg-neutral-95 dark:bg-neutral-10 dark:!text-white
+    w-full min-h-screen grid grid-cols-[1fr] grid-rows-[1fr]
     has-[[data-sidebar]]:grid-cols-[auto,1fr]
     has-[[data-navbar]]:grid-rows-[auto,1fr]
     has-[[data-sidebar]+[data-navbar]]:grid has-[[data-sidebar]+[data-navbar]]:grid-rows-[auto,1fr] has-[[data-sidebar]+[data-navbar]]:grid-cols-[auto,1fr]

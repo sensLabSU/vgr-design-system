@@ -18,11 +18,11 @@ const props = defineProps<{
 
 const color = computed(() => {
   switch(props.variant) {
-    case 'primary': return 'bg-healthcare hover:text-healthcare [&.highlight]:text-healthcare';
-    case 'success': return 'bg-green hover:text-green [&.highlight]:text-green';
-    case 'warning': return 'bg-yellow hover:text-yellow-60 [&.highlight]:text-yellow-60';
-    case 'danger': return 'bg-error hover:text-error-50 [&.highlight]:text-error-50';
-    default: return 'bg-black';
+    case 'primary': return 'dark:text-white bg-healthcare hover:text-healthcare [&.highlight]:text-healthcare dark:bg-healthcare-70 hover:dark:text-healthcare-70 [&.highlight]:dark:text-healthcare-70';
+    case 'success': return 'dark:text-white bg-green hover:text-green [&.highlight]:text-green dark:bg-green-70 hover:dark:text-green-70 [&.highlight]:dark:text-green-70';
+    case 'warning': return 'dark:text-white bg-yellow hover:text-yellow-60 [&.highlight]:text-yellow-60 dark:bg-yellow-70 hover:dark:text-yellow-70 [&.highlight]:dark:text-yellow-70';
+    case 'danger': return 'dark:text-white bg-error hover:text-error-50 [&.highlight]:text-error-50 dark:bg-error-70 hover:dark:text-error-70 [&.highlight]:dark:text-error-70';
+    default: return 'text-black bg-black dark:text-white dark:bg-white';
   }
 })
 
@@ -39,7 +39,7 @@ function onClick() {
              :type="(!is || href) ? null : 'button'"
              :to="to ?? null"
              :href="to ?? href ?? null"
-             class="vgr-item bg-opacity-0 py-1.5 px-2 flex items-center whitespace-nowrap w-full rounded-md group select-none hover:bg-opacity-5 [&.highlight]:bg-opacity-5"
+             class="vgr-item bg-opacity-0 dark:bg-opacity-0 py-1.5 px-2 flex items-center whitespace-nowrap w-full rounded-md group select-none hover:bg-opacity-5 [&.highlight]:bg-opacity-5 hover:dark:bg-opacity-5 [&.highlight]:dark:bg-opacity-5"
              :class="[color]"
              :data-has-icon="!!icon || null"
              @click="onClick"

@@ -12,8 +12,8 @@ const props = defineProps<{
     {
       'sticky': stickLeft !== undefined || stickTop,
       'top-0': stickTop,
-      'after:content-[\'\'] after:absolute after:left-full after:inset-y-0 after:w-px after:bg-neutral-90': stickLeft !== undefined,
-      'before:content-[\'\'] before:absolute before:top-full before:inset-x-0 before:h-px before:bg-neutral-90': stickTop,
+      'after:content-[\'\'] after:absolute after:left-full after:inset-y-0 after:w-px after:bg-neutral-90 dark:after:bg-neutral-50': stickLeft !== undefined,
+      'before:content-[\'\'] before:absolute before:top-full before:inset-x-0 before:h-px before:bg-neutral-90 dark:before:bg-neutral-50': stickTop,
     }
   ]" :style="{
     width: width ? width+'px' : 'auto',

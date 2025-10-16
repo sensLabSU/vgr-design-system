@@ -7,7 +7,7 @@ const props = defineProps<{
 
 <template>
   <td class="" :class="{
-    'sticky z-1 after:content-[\'\'] after:absolute after:left-full after:inset-y-0 after:w-px after:bg-neutral-90': stickLeft !== undefined,
+    'sticky z-1 after:content-[\'\'] after:absolute after:left-full after:inset-y-0 after:w-px after:bg-neutral-90 dark:after:bg-neutral-50': stickLeft !== undefined,
   }" :style="{
     width: width ? width+'px' : 'auto',
     minWidth: width ? width+'px' : 'auto',
