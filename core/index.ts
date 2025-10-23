@@ -37,3 +37,5 @@ export {default as VgrTableRow} from "./VgrTableRow.vue";
 export {default as VgrTableHeader} from "./VgrTableHeader.vue";
 export {default as VgrTableCell} from "./VgrTableCell.vue";
 export {default as VgrBreadcrumbs} from "./VgrBreadcrumbs.vue";
+export {default as VgrAccordion} from "./VgrAccordion.vue";
+export {default as VgrAccordionItem} from "./VgrAccordionItem.vue";
