@@ -22,6 +22,8 @@ class KeyboardShortcutManager {
                 this.boundKeys[key].forEach((shortcut: KeyboardShortcut) => {
                     if(shortcut._withCtrl !== undefined && shortcut._withCtrl !== e.ctrlKey) return;
                     if(shortcut._withShift !== undefined && shortcut._withShift !== e.shiftKey) return;
+                    if(shortcut._withMeta !== undefined && shortcut._withMeta !== e.metaKey) return;
+                    if(shortcut._withAlt !== undefined && shortcut._withAlt !== e.altKey) return;
 
                     shortcut.callback();
 
@@ -56,6 +58,8 @@ class KeyboardShortcut {
     _key: string;
     _withCtrl?: boolean = false;
     _withShift?: boolean = false;
+    _withMeta?: boolean = false;
+    _withAlt?: boolean = false;
 
     constructor(key: string) {
         this._key = key.toUpperCase();
@@ -78,6 +82,26 @@ class KeyboardShortcut {
 
     withOrWithoutShift() {
         this._withShift = undefined;
+        return this;
+    }
+
+    withMeta() {
+        this._withMeta = true;
+        return this;
+    }
+
+    withOrWithoutMeta() {
+        this._withMeta = undefined;
+        return this;
+    }
+
+    withAlt() {
+        this._withAlt = true;
+        return this;
+    }
+
+    withOrWithoutAlt() {
+        this._withAlt = undefined;
         return this;
     }
 
