@@ -12,6 +12,12 @@ const props = defineProps<{
   'content:class'?: string;
 }>();
 
+const emit = defineEmits<{
+  opened: [];
+  closed: [];
+  toggle: [];
+}>();
+
 const details: Ref<HTMLDetailsElement> = ref(null as unknown as HTMLDetailsElement);
 const isOpen = ref(false);
 const name = inject('name', null);
@@ -22,6 +28,9 @@ onMounted(() => {
 
 function onToggle(e: ToggleEvent) {
   isOpen.value = (e.target as HTMLDetailsElement).open;
+
+  isOpen.value ? emit( 'opened') : emit( 'closed');
+  emit('toggle');
 }
 
 function open() {
