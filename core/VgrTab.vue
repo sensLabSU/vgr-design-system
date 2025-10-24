@@ -20,11 +20,11 @@ const classes = computed(() => {
   if(variant) {
     switch(variant) {
       case 'bar':
-        cls.push('px-4 py-3 min-w-40 bg-white border-y-2 border-transparent text-neutral-60 hover:text-black hover:bg-white/75 flex-1 dark:bg-base-20 dark:text-neutral-80 dark:hover:bg-base-30 hover:text-white');
+        cls.push('px-4 py-3 min-w-40 bg-white border-y-2 border-transparent text-neutral-60 hover:text-black hover:bg-white/75 flex-1 dark:bg-base-20 dark:text-neutral-80 dark:hover:bg-base-30 dark:hover:text-white');
         cls.push('[&[data-active=true]]:border-b-healthcare-60 [&[data-active=true]]:text-healthcare dark:[&[data-active=true]]:border-b-white dark:[&[data-active=true]]:text-white');
         break;
       case 'pills':
-        cls.push('bg-neutral-90 dark:bg-neutral-20 dark:text-neutral-80 px-3.5 py-1.5 rounded-full hover:bg-neutral-80 dark:hover:bg-neutral-30 text-neutral-40 hover:text-black hover:text-white');
+        cls.push('bg-neutral-90 dark:bg-neutral-20 dark:text-neutral-80 px-3.5 py-1.5 rounded-full hover:bg-neutral-80 dark:hover:bg-neutral-30 text-neutral-40 hover:text-black dark:hover:text-white');
         cls.push('[&[data-active=true]]:bg-healthcare [&[data-active=true]]:text-white dark:[&[data-active=true]]:bg-white dark:[&[data-active=true]]:text-black');
         cls.push('[&_[data-badge]]:-mr-1');
         break;
