@@ -11,6 +11,7 @@ const props = defineProps<{
 
 const variant: string|null = inject('variant', null);
 const activeTab: string|null = inject('active-tab', null);
+// noinspection JSUnusedLocalSymbols
 const activateTab = inject('activate-tab', (name: string) => {});
 
 const classes = computed(() => {

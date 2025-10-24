@@ -1,5 +1,5 @@
 <script lang="ts">
-import type {PropType, Ref} from "vue";
+import type {PropType} from "vue";
 import {cloneVNode, h, ref, useSlots} from "vue";
 
 export default {
@@ -55,8 +55,8 @@ export default {
     const slotContent = slots.default ? slots.default() : []
     const transformedSlotContent = slotContent.map(vNode => cloneVNode(vNode, {
       onMouseenter: (e: MouseEvent) => { showTooltip(e); },
-      onMouseleave: (e: MouseEvent) => { hideTooltip(); },
-      onMousedown: (e: MouseEvent) => { hideTooltip(); },
+      onMouseleave: () => { hideTooltip(); },
+      onMousedown: () => { hideTooltip(); },
     }));
 
     return () => [

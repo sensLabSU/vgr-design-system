@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, inject, onMounted, Ref, ref} from "vue";
+import {inject, onMounted, type Ref, ref} from "vue";
 import {chevronDown, chevronRight, chevronUp} from "../icons";
 import {VgrIcon} from "./index";
 

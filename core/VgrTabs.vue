@@ -7,6 +7,7 @@ const props = defineProps<{
 
 const slots = useSlots();
 const model = defineModel({type: String, default: null});
+// noinspection JSUnusedLocalSymbols
 const onTabChanged = inject('on-tab-changed', (name: string) => {});
 
 onMounted(() => {

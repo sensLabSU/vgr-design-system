@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {provide, Ref, ref} from "vue";
+import {provide} from "vue";
 
 const props = defineProps<{
   variant?: null | 'default' | 'reversed';
