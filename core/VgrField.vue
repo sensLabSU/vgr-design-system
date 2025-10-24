@@ -6,7 +6,7 @@ provide('field-id', generatedId.value);
 </script>
 
 <template>
-  <div class="[&>[data-label]:has(+*)]:mb-2 [&>*+[data-description]]:mt-2 [&>*+[data-error]]:mt-2" data-field>
+  <div class="[&>[data-label]:has(+*)]:mb-2 [&>*+[data-description]]:mt-2 [&>*+[data-error]]:mt-2 w-full" data-field>
     <slot/>
   </div>
 </template>

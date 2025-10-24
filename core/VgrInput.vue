@@ -41,7 +41,7 @@ defineExpose({
 
 <template>
   <Wrap :is="wrapWithField && VgrField">
-    <vgr-label v-if="label">{{ label }}</vgr-label>
+    <vgr-label v-if="label" :for="componentId">{{ label }}</vgr-label>
 
     <div v-bind="$attrs" class="block w-full relative group/input">
       <input ref="inputEl" :type="type || 'text'" v-model="model" :id="componentId"
