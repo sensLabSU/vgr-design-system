@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {inject, onMounted, Ref, ref} from "vue";
+import {computed, inject, onMounted, Ref, ref} from "vue";
 import {chevronDown, chevronRight, chevronUp} from "../icons";
 import {VgrIcon} from "./index";
 
@@ -14,23 +14,14 @@ const props = defineProps<{
 
 const details: Ref<HTMLDetailsElement> = ref(null as unknown as HTMLDetailsElement);
 const isOpen = ref(false);
-
-const onItemOpen = inject('onItemOpen', () => {});
+const name = inject('name', null);
 
 onMounted(() => {
-  if(props.expanded) {
-    open();
-  }
+  props.expanded && open();
 })
 
 function onToggle(e: ToggleEvent) {
   isOpen.value = (e.target as HTMLDetailsElement).open;
-
-  if(isOpen.value) {
-    onItemOpen(e.target);
-  }
-
-  console.log('foo');
 }
 
 function open() {
@@ -56,6 +47,7 @@ defineExpose({
       [&[disabled]]:opacity-50 [&[disabled]]:pointer-events-none"
       data-accordion-item
       @toggle="onToggle"
+      :name="name ?? undefined"
       :disabled="disabled ? true : null"
   >
     <summary class="flex items-center justify-between gap-8 group cursor-pointer text-sm font-medium [[data-reversed]_&]:justify-start [[data-reversed]_&]:gap-2" :class="props['header:class']">

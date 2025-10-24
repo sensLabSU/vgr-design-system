@@ -6,21 +6,11 @@ const props = defineProps<{
   exclusive?: boolean;
 }>();
 
-const accordion: Ref<HTMLDivElement> = ref(null as unknown as HTMLDivElement);
-
-provide('onItemOpen', (item: HTMLDetailsElement) => {
-  if(!props.exclusive) return;
-
-  [...accordion.value.querySelectorAll('details[open]')]
-    .filter(i => i !== item)
-    .forEach((i: Element) => {
-      (i as HTMLDetailsElement).open = false;
-    });
-});
+provide('name', props.exclusive ? `vgr-accordion-${crypto.randomUUID()}` : null);
 </script>
 
 <template>
-<div ref="accordion" class="w-full" data-accordion :data-reversed="variant === 'reversed' ? true : null" :data-exclusive="exclusive ? true : null">
+<div class="w-full" data-accordion :data-reversed="variant === 'reversed' ? true : null" :data-exclusive="exclusive ? true : null">
   <slot/>
 </div>
 </template>
