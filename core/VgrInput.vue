@@ -45,7 +45,7 @@ defineExpose({
 
     <div v-bind="$attrs" class="block w-full relative group/input">
       <input ref="inputEl" :type="type || 'text'" v-model="model" :id="componentId"
-             :class="[props['class:input'], {'!border-error': error, 'pointer-events-none opacity-50 cursor-default': disabled}]"
+             :class="[props['class:input'], {'!border-error dark:!border-error-70': error, 'pointer-events-none opacity-50 cursor-default': disabled}]"
              :placeholder="placeholder"
              :disabled="disabled"
              class="w-full rounded-md block border border-neutral-80 bg-white dark:bg-base-10 dark:border-base-40 shadow px-2 py-1"

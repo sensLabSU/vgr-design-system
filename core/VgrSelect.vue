@@ -45,7 +45,7 @@ defineExpose({
     <div v-bind="$attrs" class="block w-full relative text-[1rem] group text-black dark:text-white leading-6">
       <select ref="selectEl" v-model="model" :id="componentId"
               class="w-full rounded-md block border border-neutral-80 bg-white dark:bg-base-10 dark:border-base-40 shadow pl-2 pr-8 py-1 appearance-none"
-              :class="[props['select:class'], {'!border-error': error, 'pointer-events-none opacity-50 cursor-default': disabled}]"
+              :class="[props['select:class'], {'!border-error dark:!border-error-70': error, 'pointer-events-none opacity-50 cursor-default': disabled}]"
               :disabled="disabled"
               data-select
               @focus="$emit('focus')"
