@@ -53,7 +53,8 @@ defineExpose({
 <template>
   <details ref="details"
       class="py-4 first:pt-0 last:pb-0 [[data-accordion-item]+&]:border-t border-base-90 dark:border-base-40 select-none
-      [&[disabled]]:opacity-50 [&[disabled]]:pointer-events-none"
+        [&[disabled]]:opacity-50 [&[disabled]]:pointer-events-none
+      "
       data-accordion-item
       @toggle="onToggle"
       :name="name ?? undefined"
@@ -71,3 +72,19 @@ defineExpose({
     </p>
   </details>
 </template>
+
+<style scoped>
+:global([data-transition] details) {
+  interpolate-size: allow-keywords;
+}
+:global([data-transition] details::details-content) {
+  transition:
+      block-size 0.25s,
+      content-visibility 0.25s allow-discrete;
+  overflow: hidden;
+  block-size: 0;
+}
+:global([data-transition] details[open]::details-content) {
+  block-size: auto;
+}
+</style>
