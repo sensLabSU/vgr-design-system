@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {chevronRight} from "../icons";
-import {VgrAvatar, VgrButton, VgrIcon} from "../core";
+import {VgrButton, VgrIcon} from "../core";
 
 const props = defineProps<{
   is: string | object;
