@@ -3,16 +3,18 @@ import {computed, inject} from "vue";
 import {VgrIcon, VgrBadge} from "./index";
 
 const props = defineProps<{
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
   is?: string|object;
-  icon?: string|object;
   href?: string;
   to?: string;
+  icon?: string|object;
+  'icon:class'?: string;
   kbd?: string;
+  'kbd:class'?: string;
   badge?: string;
-  variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
-  'class:icon'?: string;
-  'class:kbd'?: string;
-  'class:badge'?: string;
+  'badge:class'?: string;
+  'badge:variant'?: null | 'default' | 'solid';
+  'badge:color'?: null | string;
   dontCloseOnClick?: boolean;
 }>();
 
@@ -45,10 +47,10 @@ function onClick() {
              @click="onClick"
              data-item
   >
-    <vgr-icon v-if="icon" :icon="icon" :class="[props['class:icon']]" class="size-4 mr-3 opacity-50 group-hover:opacity-100 [.highlight>&]:opacity-100"/>
+    <vgr-icon v-if="icon" :icon="icon" :class="[props['icon:class']]" class="size-4 mr-3 opacity-50 group-hover:opacity-100 [.highlight>&]:opacity-100"/>
     <span v-else class="hidden [[data-command-palette]_&]:block [[data-item-list]:has([data-has-icon])_&]:block w-7"></span>
     <slot/>
-    <vgr-badge v-if="badge" :class="[props['class:badge']]" class="ml-auto" color="base">{{ badge }}</vgr-badge>
-    <span v-if="kbd" :class="[props['class:kbd']]" class="text-neutral-70 font-mono text-xs ml-auto pl-4 rounded [[data-command-palette]_&]:p-1 [[data-command-palette]_&]:bg-black/5">{{ kbd }}</span>
+    <vgr-badge v-if="badge" :class="[props['badge:class']]" :variant="props['badge:variant'] ?? 'default'" class="ml-auto" :color="props['badge:color'] ?? 'base'">{{ badge }}</vgr-badge>
+    <span v-if="kbd" :class="[props['kbd:class']]" class="text-neutral-70 font-mono text-xs ml-auto pl-4 rounded [[data-command-palette]_&]:p-1 [[data-command-palette]_&]:bg-black/5">{{ kbd }}</span>
   </component>
 </template>

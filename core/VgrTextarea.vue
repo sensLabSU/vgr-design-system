@@ -7,7 +7,7 @@ import {VgrField, VgrLabel, VgrDescription, VgrError} from "./index";
 const props = defineProps<{
   label?: string;
   description?: string;
-  'class:input'?: string;
+  'input:class'?: string;
   placeholder?: string;
   error?: string;
   max?: string | number;
@@ -45,7 +45,7 @@ defineExpose({
 
     <div v-bind="$attrs" class="block w-full relative group/input">
       <textarea ref="textareaEl" :rows="rows ?? 4" v-model="model" :id="componentId"
-             :class="[props['class:input'], {'!border-error': error}]"
+             :class="[props['input:class'], {'!border-error': error}]"
              :placeholder="placeholder"
              class="w-full rounded-md block border border-neutral-80 dark:bg-base-10 dark:border-base-40 shadow px-2 py-1"
              data-textarea

@@ -11,9 +11,9 @@ const props = defineProps<{
   lines?: boolean;
   verticalLines?: boolean;
   striped?: boolean;
-  'class:wrapper'?: string;
-  'class:head'?: string;
-  'class:body'?: string;
+  'wrapper:class'?: string;
+  'head:class'?: string;
+  'body:class'?: string;
 }>();
 
 const table = ref();
@@ -23,7 +23,7 @@ const table = ref();
   <div class="[[data-card]>&]:rounded-md overflow-hidden" :class="[{
     'w-full !overflow-x-auto relative': overflowX === 'scroll',
     'max-h-[70vh] overflow-y-scroll': overflowY === 'scroll',
-  }, props['class:wrapper']]">
+  }, props['wrapper:class']]">
     <table ref="table" v-bind="$attrs" class="
       w-full [[data-card]_&]:bg-white [[data-card]_&_*:is(td,th)]:bg-white dark:[[data-card]_&]:bg-base-20 dark:[[data-card]_&_*:is(td,th)]:bg-base-20
       [&_th]:text-left [&_th]:whitespace-nowrap [&_th]:border-b [&_*]:border-neutral-90 dark:[&_*]:border-neutral-50 [&_th]:font-semibold
@@ -34,12 +34,12 @@ const table = ref();
       '[&_*:is(td,th)+*]:border-l': verticalLines,
       '[&_tr:nth-child(2n-1)>td]:bg-[rgb(0_0_0/0.035)] [[data-card]_&_tr:nth-child(2n-1)>td]:bg-neutral-99 dark:[[data-card]_&_tr:nth-child(2n-1)>td]:bg-base-30 [&_*:is(td,th)]:!p-4': striped,
     }">
-      <thead v-if="$slots.header" :class="props['class:head']">
+      <thead v-if="$slots.header" :class="props['head:class']">
         <tr>
           <slot name="header"/>
         </tr>
       </thead>
-      <tbody :class="props['class:body']">
+      <tbody :class="props['body:class']">
         <slot/>
       </tbody>
     </table>

@@ -124,7 +124,7 @@ defineExpose({
 </script>
 
 <template>
-  <vgr-modal ref="modal" class:body="!p-0" data-command-palette>
+  <vgr-modal ref="modal" body:class="!p-0" data-command-palette>
     <div class="flex items-center gap-2 px-4 py-2">
       <vgr-icon :icon="searchOutline" class="size-5 text-neutral-50 dark:text-neutral-70"/>
       <input ref="inputEl" v-model="search" type="text"

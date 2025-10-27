@@ -8,10 +8,10 @@ defineOptions({
 
 const props = defineProps<{
   open?: any;
-  'class:header'?: string;
-  'class:body'?: string;
-  'class:footer'?: string;
-  'class:overlay'?: string;
+  'header:class'?: string;
+  'body:class'?: string;
+  'footer:class'?: string;
+  'overlay:class'?: string;
 }>();
 
 const emit = defineEmits<{
@@ -113,17 +113,17 @@ defineExpose({
 
 <template>
   <div ref="popover" popover="manual" class="size-full fixed bg-transparent starting:opacity-0 !m-0" data-modal style="/*noinspection CssInvalidPropertyValue*/transition: opacity 0.25s ease, display 0.25s allow-discrete;">
-    <div ref="wrapper" :class="[props['class:overlay']]" class="absolute inset-0 bg-black/20 py-40 overflow-y-auto" @click="onClickOverlay">
+    <div ref="wrapper" :class="[props['overlay:class']]" class="absolute inset-0 bg-black/20 py-40 overflow-y-auto" @click="onClickOverlay">
       <vgr-card v-bind="$attrs" ref="card" role="dialog" class="min-w-[40rem] max-w-full w-min mx-auto transition-transform duration-[250] starting:-translate-y-[4rem]">
-        <header v-if="$slots.header" :class="[props['class:header']]" class="p-5 border-b border-black/20 dark:text-white">
+        <header v-if="$slots.header" :class="[props['header:class']]" class="p-5 border-b border-black/20 dark:text-white">
           <slot name="header"/>
         </header>
 
-        <main class="p-5 dark:text-white" :class="[props['class:body']]">
+        <main class="p-5 dark:text-white" :class="[props['body:class']]">
           <slot/>
         </main>
 
-        <footer v-if="$slots.footer" :class="[props['class:footer']]" class="p-5 border-t border-black/20 dark:text-white">
+        <footer v-if="$slots.footer" :class="[props['footer:class']]" class="p-5 border-t border-black/20 dark:text-white">
           <slot name="footer"/>
         </footer>
       </vgr-card>

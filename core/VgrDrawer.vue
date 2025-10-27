@@ -7,7 +7,7 @@ defineOptions({
 
 const props = defineProps<{
   open?: any;
-  'class:overlay'?: string;
+  'overlay:class'?: string;
 }>();
 
 const emit = defineEmits<{
@@ -110,7 +110,7 @@ defineExpose({
 
 <template>
   <div ref="popover" popover="manual" class="size-full fixed bg-transparent inset-0 !m-0 opacity-0 z-[10000] transform-gpu" data-drawer style="/*noinspection CssInvalidPropertyValue*/transition: opacity 0.25s ease, display 0.25s allow-discrete;">
-    <div ref="wrapper" :class="[props['class:overlay']]" class="absolute inset-0 bg-black/20 dark:bg-black/40 overflow-hidden" @click="onClickOverlay">
+    <div ref="wrapper" :class="[props['overlay:class']]" class="absolute inset-0 bg-black/20 dark:bg-black/40 overflow-hidden" @click="onClickOverlay">
       <div v-bind="$attrs" ref="drawer" role="dialog"
            class="absolute right-0 inset-y-0 min-w-[24rem] bg-white dark:bg-base-20 dark:text-white
            after:content-[''] after:absolute after:inset-y-0 after:right-full after:w-4 after:bg-gradient-to-l after:from-black/15

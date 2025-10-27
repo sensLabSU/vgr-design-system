@@ -7,8 +7,8 @@ import {computed} from "vue";
 const props = defineProps<{
   name: string;
   ariaLabel?: string;
-  'class:avatar'?: string;
-  'class:icon'?: string;
+  'avatar:class'?: string;
+  'icon:class'?: string;
 }>();
 
 const initials: ComputedRef<string> = computed((): string => {
@@ -18,8 +18,8 @@ const initials: ComputedRef<string> = computed((): string => {
 
 <template>
   <vgr-button variant="ghost" color="white" :aria-label="ariaLabel ?? 'Användarmeny'">
-    <vgr-avatar color="purple" :class="[props['class:avatar']]" class="-ml-1 mr-1">{{ initials }}</vgr-avatar>
+    <vgr-avatar color="purple" :class="[props['avatar:class']]" class="-ml-1 mr-1">{{ initials }}</vgr-avatar>
     {{ name }}
-    <vgr-icon :icon="chevronDown" :class="[props['class:icon']]" class="size-5"/>
+    <vgr-icon :icon="chevronDown" :class="[props['icon:class']]" class="size-5"/>
   </vgr-button>
 </template>
