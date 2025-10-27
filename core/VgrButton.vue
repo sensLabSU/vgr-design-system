@@ -22,6 +22,8 @@ const props = withDefaults(defineProps<{
   tabindex?: number;
   icon?: string | object;
   'icon:class'?: string;
+  iconTrailing?: string | object;
+  'icon-trailing:class'?: string;
 }>(), {
   is: 'button',
   type: 'button',
@@ -202,5 +204,6 @@ const classes: ComputedRef<string> = computed((): string => {
   >
     <vgr-icon v-if="icon" :icon="icon" class="size-4" :class="[props['icon:class']]"/>
     <slot/>
+    <vgr-icon v-if="iconTrailing" :icon="iconTrailing" class="size-4" :class="[props['icon-trailing:class']]"/>
   </component>
 </template>
