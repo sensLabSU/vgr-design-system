@@ -38,15 +38,15 @@ const resolvedIcon = computed(() => {
 
 <template>
   <vgr-card class="flex items-start gap-3 text-sm" :class="[cardClasses, compact ? 'p-3' : 'p-4']">
-    <vgr-icon v-if="!compact" :icon="resolvedIcon" class="size-4 opacity-60" :class="props['icon:class']"/>
+    <vgr-icon v-if="!compact" :icon="resolvedIcon" class="size-4 opacity-60 dark:opacity-75" :class="props['icon:class']"/>
 
     <div :class="[compact ? 'space-y-2' : 'space-y-3']">
       <div class="leading-4 font-medium flex items-center gap-2">
-        <vgr-icon v-if="compact" :icon="resolvedIcon" class="size-4 opacity-60" :class="props['icon:class']"/>
+        <vgr-icon v-if="compact" :icon="resolvedIcon" class="size-4 opacity-60 dark:opacity-75" :class="props['icon:class']"/>
         <span :class="props['header:class']">{{ heading }}</span>
       </div>
 
-      <div class="opacity-60" :class="props['content:class']">
+      <div class="opacity-60 dark:opacity-75" :class="props['content:class']">
         <slot/>
       </div>
     </div>
