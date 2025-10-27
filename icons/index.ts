@@ -28,7 +28,9 @@ export {default as clipboardPencilOutline} from './clipboard-pencil-outline.svg?
 export {default as cogOutline} from './cog-outline.svg?inline';
 export {default as dashboardOutline} from './dashboard-outline.svg?inline';
 export {default as dotCircleOutline} from './dot-circle-outline.svg?inline';
+export {default as errorOutline} from './error-outline.svg?inline';
 export {default as eyeOutline} from './eye-outline.svg?inline';
+export {default as exclamationCircleOutline} from './exclamation-circle-outline.svg?inline';
 export {default as fileTextOutline} from './file-text-outline.svg?inline';
 export {default as filtersOutline} from './filters-outline.svg?inline';
 export {default as graphsOutline} from './graphs-outline.svg?inline';
@@ -47,3 +49,4 @@ export {default as sunOutline} from './sun-outline.svg?inline';
 export {default as trashCanOutline} from './trash-can-outline.svg?inline';
 export {default as treatmentOutline} from './treatment-outline.svg?inline';
 export {default as userOutline} from './user-outline.svg?inline';
+export {default as warningOutline} from './warning-outline.svg?inline';
