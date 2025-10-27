@@ -24,7 +24,7 @@ const props = defineProps<{
       <div class="py-1 text-sm">
         <slot/>
       </div>
-      <div v-if="dateTime" class="p-1 ml-auto text-xs text-black/40 shrink-0">{{ dateTime }}</div>
+      <div v-if="dateTime" class="p-1 pl-4 ml-auto text-xs text-black/40 dark:text-white/40 shrink-0">{{ dateTime }}</div>
     </div>
   </li>
 </template>
