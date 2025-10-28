@@ -4,12 +4,12 @@ import {checkmark, errorOutline, exclamationCircleOutline, infoCircleOutline, wa
 import {VgrCard, VgrIcon} from "./index";
 
 const props = defineProps<{
-  heading: string;
+  heading?: string;
   icon?: null | object | string;
   compact?: boolean;
   variant?: null | 'default' | 'information' | 'success' | 'warning' | 'danger';
   'icon:class'?: string;
-  'header:class'?: string;
+  'heading:class'?: string;
   'content:class'?: string;
 }>();
 
@@ -23,6 +23,16 @@ const cardClasses = computed(() => {
   }
 });
 
+const textClasses = computed(() => {
+  switch(props.variant) {
+    case 'information': return 'text-blue-30/60 dark:text-blue-90/75';
+    case 'success': return 'text-green-30/60 dark:text-green-90/75';
+    case 'warning': return 'text-yellow-30/60 dark:text-yellow-90/75';
+    case 'danger': return 'text-error-30/60 dark:text-error-80/75';
+   default: return 'text-black/60 dark:text-white/75';
+  }
+});
+
 const resolvedIcon = computed(() => {
   if(props.icon) return props.icon;
 
@@ -33,20 +43,34 @@ const resolvedIcon = computed(() => {
     case 'danger': return errorOutline;
     default: return exclamationCircleOutline;
   }
-})
+});
+
+const iconSize = computed(() => {
+  if(props.icon) return 'size-[1.125rem] -m-px';
+
+  switch(props.variant) {
+    case 'information':
+    case 'danger':
+      return 'size-4';
+    default:
+      return 'size-[1.125rem] -m-px';
+  }
+});
 </script>
 
 <template>
   <vgr-card class="flex items-start gap-3 text-sm" :class="[cardClasses, compact ? 'p-3' : 'p-4']">
-    <vgr-icon v-if="!compact" :icon="resolvedIcon" class="size-4 opacity-60 dark:opacity-75" :class="props['icon:class']"/>
+    <vgr-icon v-if="!compact" :icon="resolvedIcon" class="opacity-60 dark:opacity-75" :class="[iconSize, props['icon:class']]"/>
 
     <div :class="[compact ? 'space-y-2' : 'space-y-3']">
       <div class="leading-4 font-medium flex items-center gap-2">
-        <vgr-icon v-if="compact" :icon="resolvedIcon" class="size-4 opacity-60 dark:opacity-75" :class="props['icon:class']"/>
-        <span :class="props['header:class']">{{ heading }}</span>
+        <vgr-icon v-if="compact" :icon="resolvedIcon" class="opacity-60 dark:opacity-75" :class="[iconSize, props['icon:class']]"/>
+        <span class="w-full flex" :class="props['heading:class']">
+          <slot name="heading">{{ heading }}</slot>
+        </span>
       </div>
 
-      <div class="opacity-60 dark:opacity-75" :class="props['content:class']">
+      <div v-if="$slots.default" class="" :class="[compact ? 'space-y-2' : 'space-y-3', textClasses, props['content:class']]">
         <slot/>
       </div>
     </div>
