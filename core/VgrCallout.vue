@@ -15,10 +15,10 @@ const props = defineProps<{
 
 const cardClasses = computed(() => {
   switch(props.variant) {
-    case 'information': return '!bg-blue-95 text-blue-30 !border-blue-80 dark:!bg-blue-20 dark:text-blue-90 dark:!border-blue-40';
+    case 'information': return '!bg-blue-95 text-blue-30 !border-blue-80 dark:!bg-blue-10 dark:text-blue-90 dark:!border-blue-40';
     case 'success': return '!bg-green-95 text-green-30 !border-green-80 dark:!bg-green-20 dark:text-green-90 dark:!border-green-40';
     case 'warning': return '!bg-yellow-99 text-yellow-30 !border-yellow-80 dark:!bg-yellow-20 dark:text-yellow-90 dark:!border-yellow-40';
-    case 'danger': return '!bg-error-95 text-error-30 !border-error-80 dark:!bg-error-20 dark:text-error-90 dark:!border-error-40';
+    case 'danger': return '!bg-error-95 text-error-30 !border-error-80 dark:!bg-error-10 dark:text-error-80 dark:!border-error-40';
    default: return '!bg-base-99 text-black !border-base-80 dark:!bg-base-30 dark:text-white dark:!border-base-50';
   }
 });
