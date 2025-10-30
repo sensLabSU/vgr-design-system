@@ -42,3 +42,4 @@ export {default as VgrAccordionItem} from "./VgrAccordionItem.vue";
 export {default as VgrSelect} from "./VgrSelect.vue";
 export {default as VgrOption} from "./VgrOption.vue";
 export {default as VgrCallout} from "./VgrCallout.vue";
+export {default as VgrCalendar} from "./VgrCalendar.vue";
