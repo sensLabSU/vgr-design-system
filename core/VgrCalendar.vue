@@ -58,7 +58,7 @@ function prevMonth() {
   currentMonthAndYear.value = currentMonthAndYear.value.sub(1, 'month');
 }
 
-const currentMonthAndYear: Ref<DateTime> = ref(now(props.openTo ?? new Date()).startOf('month'));
+const currentMonthAndYear: Ref<DateTime> = ref(now(props.openTo ?? (props.value ? new Date(props.value) : new Date())).startOf('month'));
 const minDate: Ref<DateTime|null> = ref(props.min ? now(props.min).startOf('day') : null);
 const maxDate: Ref<DateTime|null> = ref(props.max ? now(props.max).endOf('day') : null);
 const unavailableDates = computed(() => {

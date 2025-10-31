@@ -169,10 +169,10 @@ function translatedMonthAndYear(date: Date) {
     <table>
       <thead>
       <tr class="flex w-full">
-        <th v-if="showWeeks" :class="[cellSize, textSize]" class="flex items-center text-black/50 dark:text-white/50 font-normal">
+        <th v-if="showWeeks" :class="[cellSize, textSize]" class="flex items-center text-black/35 dark:text-white/35 font-normal">
           <div class="w-full flex items-center justify-center">#</div>
         </th>
-        <th v-for="(header, i) in headerRow" :key="i" :class="[cellSize, textSize]" class="flex items-center text-black/50 dark:text-white/50 font-normal">
+        <th v-for="(header, i) in headerRow" :key="i" :class="[cellSize, textSize]" class="flex items-center text-black/40 dark:text-white/40 font-normal">
           <div class="w-full flex items-center justify-center">{{ header }}</div>
         </th>
       </tr>
@@ -181,7 +181,7 @@ function translatedMonthAndYear(date: Date) {
       <template v-for="(row, i) in calendarRows" :key="i">
         <tr class="flex w-full mt-1 first:mt-0">
           <td v-if="showWeeks" :class="[cellSize, textSize]" class="flex-0 flex items-center text-black/50 dark:text-white/50 font-normal">
-            <div class="w-full flex items-center justify-center">{{ row[0].value.getWeek() }}</div>
+            <div class="w-full flex items-center justify-center text-[75%]">{{ row[0].value.getWeek() }}</div>
           </td>
           <td v-for="(day, j) in row" :key="j"
               :class="[cellSize, textSize]"
